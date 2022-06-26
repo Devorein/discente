@@ -1,0 +1,30 @@
+{
+  "name": "@discente/shared",
+  "version": "0.0.4",
+  "description": "Package for code shared between `@discente/client` & `@discente/server`",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "readme"
+  ],
+  "scripts": {
+    "prebuild": "del-cli ./dist",
+    "build": "tsc --sourceMap false",
+    "build:watch": "tsc -w",
+    "lint": "eslint -c .eslintrc.js . --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "dev": "npm run build:watch",
+    "format": "npx prettier \"./src/**/*.(ts|js)\" --write"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yup": "^0.32.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
