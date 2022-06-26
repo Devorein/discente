@@ -10,7 +10,13 @@ export interface SuccessApiResponse<data> {
 }
 export type ApiResponse<Data> = SuccessApiResponse<Data> | ErrorApiResponse;
 
+// Model types
 export type UserWithoutSecretFields = Omit<User, 'hashedPass' | 'tokenVersion'>;
+
+export type UserJWTPayload = Omit<
+  User,
+  'createdAt' | 'updatedAt' | 'name' | 'hashedPass' | 'avatar' | 'status'
+>;
 
 // API payload and response types
 
