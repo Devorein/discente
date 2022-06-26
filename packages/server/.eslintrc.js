@@ -12,6 +12,7 @@ eslintConfig.rules["jest/expect-expect"] = [
     "assertFunctionNames": ["expect", "expect*", "assertSupertestErrorRequest", "assertSupertestSuccessRequest"]
   }
 ]
+eslintConfig.rules["import/no-extraneous-dependencies"] = "off"
 
 eslintConfig.overrides = [
   {
