@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { ErrorApiResponse } from './types';
-import { Logger } from './utils';
+import Logger from './utils/logger';
 
 export default class ApiError extends Error {
   statusCode: number;
