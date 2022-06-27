@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import ApiError, { UniqueConstraintViolationError, UserNotFoundError } from "../ApiError";
+import ApiError, { UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
 import { prisma } from "../config";
 import { LoginUserPayload, RegisterUserPayload } from "../types";
 import { hashPassword, verifyPassword } from "../utils";
@@ -50,4 +50,27 @@ export async function loginUser(
   if (!user) throw new UserNotFoundError();
   await verifyPassword(user.hashedPass, password);
   return user;
+}
+
+export async function incrementTokenVersionById(
+  userId: string
+) {
+  try {
+    return await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        tokenVersion: {
+          increment: 1
+        }
+      }
+    });
+  } catch (err) {
+    if (err.code === 'P2025') {
+      throw new UserNotFoundError();
+    } else {
+      throw new UpdateFailedError('tokenVersion');
+    }
+  }
 }
