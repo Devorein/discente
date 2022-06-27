@@ -33,3 +33,4 @@ export type LoginUserPayload = {
   remember?: boolean;
 };
 
+export type LoginUserResponse = UserWithoutSecretFields
