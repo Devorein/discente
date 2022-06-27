@@ -1,0 +1,72 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "jsx": "react",
+      "module": "CommonJS"
+    },
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  },
+  "compilerOptions": {
+    "removeComments": true,
+    "baseUrl": ".",
+    "strict": true,
+    "target": "es2019",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
+    "allowJs": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "types": [
+      "react",
+      "node",
+      "jest"
+    ],
+    "paths": {
+      "@types": [
+        "../server/src/types.ts"
+      ],
+      "api": [
+        "./api"
+      ],
+      "hooks": [
+        "./hooks"
+      ],
+      "components": [
+        "./components"
+      ],
+      "contexts": [
+        "./contexts"
+      ],
+      "utils": [
+        "./utils"
+      ],
+      "@constants": [
+        "@constants/index.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "./tests/**/*.ts",
+    "./jest.config.ts",
+    "./mocks/**/*.ts"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
