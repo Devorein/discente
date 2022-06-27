@@ -22,5 +22,6 @@ authRouter.post(
 );
 
 authRouter.post('/logout', isAuthenticated, authController.logout);
+authRouter.get('/me', isAuthenticated, authController.me)
 
 export default authRouter;
