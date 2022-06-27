@@ -31,7 +31,7 @@ export function signToken<Payload extends Record<string, any>>(
  * @param user User
  * @param remember Session cookie or long lasting cookie
  */
-export const addUserAuthCookieToResponse = (
+export const addCookieToResponse = (
   res: Response,
   user: User,
   remember?: boolean
@@ -49,3 +49,10 @@ export const addUserAuthCookieToResponse = (
     expires: remember ? new Date(Date.now() + 24 * 60 * 60 * 1000) : undefined // 1 day from now
   });
 };
+
+/**
+ * Removes user authenticated cookies from response
+ * @param res Express Response
+ */
+export const removeCookieFromResponse = (res: Response) =>
+  res.clearCookie(COOKIE_NAME, cookieOptions);

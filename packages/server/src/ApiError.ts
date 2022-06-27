@@ -66,3 +66,13 @@ export class IncorrectPasswordError extends ApiError {
     super(IncorrectPasswordError.message, IncorrectPasswordError.statusCode)
   }
 }
+
+export class NotAuthenticatedError extends ApiError {
+  static message: string = 'Not authenticated'
+
+  static statusCode: number = 401
+
+  constructor() {
+    super(NotAuthenticatedError.message, NotAuthenticatedError.statusCode)
+  }
+}
