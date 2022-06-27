@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { incrementTokenVersionById, loginUser, registerUser } from '../models';
-import { ApiResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
+import { ApiResponse, GetCurrentUserResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
 import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields } from '../utils';
 
 export const authController = {
@@ -44,4 +44,18 @@ export const authController = {
       return handleError(res, err);
     }
   },
+
+  me: async (
+    req: Request,
+    res: Response<ApiResponse<GetCurrentUserResponse>>
+  ) => {
+    try {
+      const loggedInUser = removeSecretUserFields(
+        req.user!
+      );
+      return handleSuccess<GetCurrentUserResponse>(res, loggedInUser);
+    } catch (err) {
+      return handleError(res, err);
+    }
+  }
 }

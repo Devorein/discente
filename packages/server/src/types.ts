@@ -38,3 +38,5 @@ export type LoginUserResponse = UserWithoutSecretFields
 export type LogoutUserPayload = {
   allDevices?: boolean;
 };
+
+export type GetCurrentUserResponse = UserWithoutSecretFields
