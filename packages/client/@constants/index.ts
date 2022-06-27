@@ -1,5 +1,6 @@
-import { registerUserPayloadSchema } from '@discente/shared';
-import { RegisterUserPayload } from '@types';
+// eslint-disable-next-line
+import { loginUserPayloadSchema, registerUserPayloadSchema } from '@discente/shared';
+import { LoginUserPayload, RegisterUserPayload } from '@types';
 import { BaseSchema } from 'yup';
 
 export const SERVER_URL =
@@ -61,8 +62,36 @@ const registerUserConstants: ApiConstants<RegisterUserPayload> & FormConstants<R
   formHeaderText: 'Create an account'
 };
 
+const loginUserConstants: ApiConstants<LoginUserPayload> & FormConstants<LoginUserPayload> = {
+  endpoint: 'auth/login',
+  payloadFactory: () => {
+    return {
+      usernameOrEmail: '',
+      password: '',
+      remember: false
+    };
+  },
+  successMessage: 'Successfully logged In!',
+  key: () => ['login'],
+  validationSchema: loginUserPayloadSchema(),
+  label: {
+    usernameOrEmail: 'Username or Email',
+    password: 'Password',
+    remember: 'Remember me'
+  },
+  placeholder: {
+    usernameOrEmail: 'john.doe@gmail.com',
+    password: '********',
+    remember: 'Remember me'
+  },
+  formHeaderText: 'Login To Your Account',
+  onLoadButtonText: 'Logging in...',
+  submitButtonText: 'Login'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
-  registerUser: registerUserConstants
+  registerUser: registerUserConstants,
+  loginUser: loginUserConstants
 };
 
