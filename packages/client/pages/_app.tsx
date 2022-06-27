@@ -1,6 +1,10 @@
+import { Document } from 'components';
 import { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
+import { createQueryClient } from 'utils';
 import '../styles/style.css';
+
+const queryClient = createQueryClient();
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -18,9 +22,9 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     mounted && (
-      <div>
+      <Document queryClient={queryClient}>
         <Component {...pageProps} />
-      </div>
+      </Document>
     )
   );
 }
