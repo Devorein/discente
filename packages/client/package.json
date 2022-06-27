@@ -44,9 +44,10 @@
     "ts-node": "^10.8.1"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3004",
     "build": "next build",
-    "start:prod": "pm2 start next --name client --time -- start -p 3004",
+    "start": "next start",
+    "start:prod": "pm2 start next --name client --time -- start -p 3000",
     "test:unit": "npx jest --runInBand --config='./jest.config.ts'",
     "sb:start": "npx start-storybook -p 3003",
     "build-storybook": "npx build-storybook",
