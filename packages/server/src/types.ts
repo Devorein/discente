@@ -26,3 +26,10 @@ export type RegisterUserPayload = Pick<
 > & { password: string };
 
 export type RegisterUserResponse = UserWithoutSecretFields;
+
+export type LoginUserPayload = {
+  password: string;
+  usernameOrEmail: string;
+  remember?: boolean;
+};
+
