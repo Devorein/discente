@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Providers from './Providers';
+import RouteGuard from './RouteGuard';
 
 export default function Document({
   children,
@@ -28,8 +29,12 @@ export default function Document({
             p: 2
           }}
         >
-          {children}
-          {showReactQueryDevTools && <ReactQueryDevtools />}
+          <RouteGuard>
+            <>
+              {children}
+              {showReactQueryDevTools && <ReactQueryDevtools />}
+            </>
+          </RouteGuard>
         </Paper>
       </Providers>
     </>
