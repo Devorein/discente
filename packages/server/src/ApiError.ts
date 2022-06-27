@@ -36,3 +36,43 @@ export class UniqueConstraintViolationError extends ApiError {
     super(UniqueConstraintViolationError.messageConstructor(entity, field), UniqueConstraintViolationError.statusCode)
   }
 }
+
+export class NotFoundError extends ApiError {
+  static statusCode: number = 404;
+
+  static messageConstructor(entity: string) {
+    return `Couldn't find ${entity}`
+  }
+
+  constructor(entity: string) {
+    super(NotFoundError.messageConstructor(entity), NotFoundError.statusCode)
+  }
+}
+
+export class UserNotFoundError extends NotFoundError {
+  static message: string = NotFoundError.messageConstructor('user')
+
+  constructor() {
+    super('user')
+  }
+}
+
+export class IncorrectPasswordError extends ApiError {
+  static message: string = 'Incorrect password'
+
+  static statusCode: number = 401
+
+  constructor() {
+    super(IncorrectPasswordError.message, IncorrectPasswordError.statusCode)
+  }
+}
+
+export class NotAuthenticatedError extends ApiError {
+  static message: string = 'Not authenticated'
+
+  static statusCode: number = 401
+
+  constructor() {
+    super(NotAuthenticatedError.message, NotAuthenticatedError.statusCode)
+  }
+}

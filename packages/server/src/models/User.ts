@@ -1,13 +1,13 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import ApiError, { UniqueConstraintViolationError } from "../ApiError";
+import ApiError, { UniqueConstraintViolationError, UserNotFoundError } from "../ApiError";
 import { prisma } from "../config";
-import { RegisterUserPayload } from "../types";
-import { hashPassword } from "../utils";
+import { LoginUserPayload, RegisterUserPayload } from "../types";
+import { hashPassword, verifyPassword } from "../utils";
 
 export async function registerUser(
   payload: RegisterUserPayload
-): Promise<User> {
+) {
   const hashedPassword = await hashPassword(payload.password);
   try {
     const id = v4();
@@ -29,4 +29,25 @@ export async function registerUser(
 
     throw new ApiError();
   }
+}
+
+export async function loginUser(
+  payload: LoginUserPayload
+) {
+  const { password, usernameOrEmail } = payload;
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        {
+          username: usernameOrEmail
+        },
+        {
+          email: usernameOrEmail
+        }
+      ]
+    }
+  });
+  if (!user) throw new UserNotFoundError();
+  await verifyPassword(user.hashedPass, password);
+  return user;
 }

@@ -1,4 +1,5 @@
 import {
+  loginUserPayloadSchema,
   registerUserPayloadSchema
 } from '@discente/shared';
 
@@ -12,6 +13,12 @@ authRouter.post(
   '/register',
   validateData(registerUserPayloadSchema()),
   authController.register
+);
+
+authRouter.post(
+  '/login',
+  validateData(loginUserPayloadSchema()),
+  authController.login
 );
 
 export default authRouter;

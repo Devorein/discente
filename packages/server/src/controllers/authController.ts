@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { registerUser } from '../models';
-import { ApiResponse, RegisterUserPayload, RegisterUserResponse } from '../types';
-import { addUserAuthCookieToResponse, handleError, handleSuccess, removeSecretUserFields } from '../utils';
+import { loginUser, registerUser } from '../models';
+import { ApiResponse, LoginUserPayload, LoginUserResponse, RegisterUserPayload, RegisterUserResponse } from '../types';
+import { addCookieToResponse, handleError, handleSuccess, removeSecretUserFields } from '../utils';
 
 export const authController = {
   register: async (
@@ -10,8 +10,21 @@ export const authController = {
   ) => {
     try {
       const user = await registerUser(req.body);
-      addUserAuthCookieToResponse(res, user);
+      addCookieToResponse(res, user);
       handleSuccess<RegisterUserResponse>(res, removeSecretUserFields(user));
+    } catch (err) {
+      handleError(res, err);
+    }
+  },
+
+  login: async (
+    req: Request<any, any, LoginUserPayload>,
+    res: Response<ApiResponse<LoginUserResponse>>
+  ) => {
+    try {
+      const user = await loginUser(req.body);
+      addCookieToResponse(res, user, req.body.remember);
+      handleSuccess<LoginUserResponse>(res, removeSecretUserFields(user));
     } catch (err) {
       handleError(res, err);
     }
