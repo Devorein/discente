@@ -76,3 +76,15 @@ export class NotAuthenticatedError extends ApiError {
     super(NotAuthenticatedError.message, NotAuthenticatedError.statusCode)
   }
 }
+
+export class UpdateFailedError extends ApiError {
+  static statusCode: number = 400
+
+  static messageConstructor(entity: string) {
+    return `Failed to update ${entity}`
+  }
+
+  constructor(entity: string) {
+    super(UpdateFailedError.messageConstructor(entity), UpdateFailedError.statusCode)
+  }
+}

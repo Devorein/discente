@@ -34,3 +34,7 @@ export type LoginUserPayload = {
 };
 
 export type LoginUserResponse = UserWithoutSecretFields
+
+export type LogoutUserPayload = {
+  allDevices?: boolean;
+};

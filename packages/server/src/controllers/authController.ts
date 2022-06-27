@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { loginUser, registerUser } from '../models';
-import { ApiResponse, LoginUserPayload, LoginUserResponse, RegisterUserPayload, RegisterUserResponse } from '../types';
-import { addCookieToResponse, handleError, handleSuccess, removeSecretUserFields } from '../utils';
+import { incrementTokenVersionById, loginUser, registerUser } from '../models';
+import { ApiResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
+import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields } from '../utils';
 
 export const authController = {
   register: async (
@@ -27,6 +27,21 @@ export const authController = {
       handleSuccess<LoginUserResponse>(res, removeSecretUserFields(user));
     } catch (err) {
       handleError(res, err);
+    }
+  },
+
+  logout: async (
+    req: Request<any, any, LogoutUserPayload>,
+    res: Response<ApiResponse<undefined>>
+  ) => {
+    try {
+      removeCookieFromResponse(res);
+      if (req.body?.allDevices) {
+        await incrementTokenVersionById(req.user!.id);
+      }
+      return handleSuccess<undefined>(res, undefined);
+    } catch (err) {
+      return handleError(res, err);
     }
   },
 }

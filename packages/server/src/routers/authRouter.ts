@@ -5,7 +5,7 @@ import {
 
 import { Router } from 'express';
 import { authController } from '../controllers';
-import { validateData } from '../middlewares';
+import { isAuthenticated, validateData } from '../middlewares';
 
 const authRouter = Router();
 
@@ -20,5 +20,7 @@ authRouter.post(
   validateData(loginUserPayloadSchema()),
   authController.login
 );
+
+authRouter.post('/logout', isAuthenticated, authController.logout);
 
 export default authRouter;
