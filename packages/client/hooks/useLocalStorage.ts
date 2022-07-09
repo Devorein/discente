@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const PREFIX = 'reinforz.v1';
+const PREFIX = 'discente.v1';
 
 export function getStorageValue<T = any>(key: string, defaultValue: T): T {
   if (typeof window !== 'undefined') {
