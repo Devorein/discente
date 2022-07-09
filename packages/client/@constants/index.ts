@@ -89,9 +89,16 @@ const loginUserConstants: ApiConstants<LoginUserPayload> & FormConstants<LoginUs
   submitButtonText: 'Login'
 };
 
+const logoutUserConstants: ApiConstants = {
+  endpoint: 'auth/logout',
+  key: () => ['logout'],
+  successMessage: 'Successfully logged out!'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
+  logoutUser: logoutUserConstants,
   loginUser: loginUserConstants
 };
 
