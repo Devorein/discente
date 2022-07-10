@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import { UniqueConstraintViolationError } from "../../src/ApiError";
-import { registerUser } from "../../src/models";
+import { IncorrectPasswordError, UniqueConstraintViolationError, UserNotFoundError } from "../../src/ApiError";
+import { loginUser, registerUser } from "../../src/models";
 import { RegisterUserPayload } from "../../src/types";
 import { getError } from "../helpers/errors";
 import { expectUserResponse } from "../helpers/user";
@@ -44,5 +44,38 @@ describe('registerUser', () => {
     );
     expect(error.message).toBe(UniqueConstraintViolationError.messageConstructor('user', 'username'));
     expect(error.statusCode).toBe(UniqueConstraintViolationError.statusCode);
+  });
+});
+
+describe('loginUser', () => {
+  it(`Should login correctly with email`, async () => {
+    const loggedUser = await loginUser({
+      usernameOrEmail: activeUser.username,
+      password: userPassword
+    });
+    expectUserResponse(activeUser, loggedUser);
+    expect(loggedUser).not.toHaveProperty('password');
+  });
+
+  it(`Should throw error on incorrect password`, async () => {
+    const error = await getError(async () =>
+      loginUser({
+        usernameOrEmail: activeUser.email,
+        password: 'wrong_password'
+      })
+    );
+    expect(error.message).toBe(IncorrectPasswordError.message);
+    expect(error.statusCode).toBe(IncorrectPasswordError.statusCode);
+  });
+
+  it(`Should throw error if username or email or both doesn't match/exist`, async () => {
+    const error = await getError(async () =>
+      loginUser({
+        usernameOrEmail: 'john.doe1@gmail.com',
+        password: 'secret123'
+      })
+    );
+    expect(error.message).toBe(UserNotFoundError.message);
+    expect(error.statusCode).toBe(UserNotFoundError.statusCode);
   });
 });
