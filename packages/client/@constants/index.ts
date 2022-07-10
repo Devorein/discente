@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-import { loginUserPayloadSchema, registerUserPayloadSchema } from '@discente/shared';
-import { LoginUserPayload, RegisterUserPayload } from '@types';
+import { changeUserPasswordClientPayloadSchema, loginUserPayloadSchema, registerUserPayloadSchema } from '@discente/shared';
+import { ChangeUserPasswordPayload, LoginUserPayload, RegisterUserPayload } from '@types';
 import { BaseSchema } from 'yup';
 
 export const SERVER_URL =
@@ -95,11 +95,28 @@ const logoutUserConstants: ApiConstants = {
   successMessage: 'Successfully logged out!'
 };
 
+const changeUserPasswordConstants: ApiConstants<
+  ChangeUserPasswordPayload & {
+    confirmNewPassword: string;
+  }
+> = {
+  payloadFactory: () => ({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
+  }),
+  endpoint: 'auth/change-password',
+  key: () => ['change-password'],
+  successMessage: 'Successfully Changed Password!',
+  validationSchema: changeUserPasswordClientPayloadSchema()
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
   logoutUser: logoutUserConstants,
-  loginUser: loginUserConstants
+  loginUser: loginUserConstants,
+  changeUserPassword: changeUserPasswordConstants
 };
 
 export const siteMetadata = {
