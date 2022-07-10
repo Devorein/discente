@@ -40,3 +40,8 @@ export type LogoutUserPayload = {
 };
 
 export type GetCurrentUserResponse = UserWithoutSecretFields
+
+export type ChangeUserPasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+};
