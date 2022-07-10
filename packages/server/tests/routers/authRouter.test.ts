@@ -77,7 +77,7 @@ describe('POST /auth/login', () => {
   })
 })
 
-describe.only('POST /auth/logout', () => {
+describe('POST /auth/logout', () => {
   it(`Should fail if no cookie is passed`, async () => {
     await assertSupertestErrorRequest({
       endpoint: 'auth/logout',
@@ -86,10 +86,28 @@ describe.only('POST /auth/logout', () => {
     })
   })
 
-  it.only(`Should pass if cookie is passed`, async () => {
+  it(`Should pass if cookie is passed`, async () => {
     await assertSupertestSuccessRequest({
       endpoint: 'auth/logout',
       method: "post",
+      cookie: userToken
+    })
+  })
+})
+
+describe('GET /auth/me', () => {
+  it(`Should fail if no cookie is passed`, async () => {
+    await assertSupertestErrorRequest({
+      endpoint: 'auth/me',
+      method: "get",
+      statusCode: 401,
+    })
+  })
+
+  it(`Should pass if cookie is passed`, async () => {
+    await assertSupertestSuccessRequest({
+      endpoint: 'auth/me',
+      method: "get",
       cookie: userToken
     })
   })
