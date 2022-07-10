@@ -4,7 +4,7 @@ import { UniqueConstraintViolationError, UserNotFoundError } from '../../src/Api
 import { prisma } from '../../src/config';
 import authController from '../../src/controllers/authController';
 import { registerUser } from '../../src/models/User';
-import { LoginUserPayload, RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
+import { LoginUserPayload, LogoutUserPayload, RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
 import { hashPassword } from '../../src/utils';
 import { mockRequest, mockResponse } from '../helpers/mocks';
 import { expectUserResponse } from '../helpers/user';
@@ -131,5 +131,44 @@ describe('authController.login', () => {
       mockedResponseData.data
     );
     expect(mockedResponseData.data).not.toHaveProperty('password');
+  });
+});
+
+describe('authController.logout', () => {
+  it(`Should remove cookie successfully`, async () => {
+    const mockedRequest = mockRequest<LogoutUserPayload>();
+    const mockedResponse = mockResponse();
+
+    await authController.logout(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.mockedClearCookie).toHaveBeenCalled();
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+  });
+
+  it(`Should remove cookie successfully when logging out from all devices`, async () => {
+    const mockedRequest = mockRequest<LogoutUserPayload>({
+      body: { allDevices: true },
+      user: { id: privateUser.id }
+    });
+    const mockedResponse = mockResponse();
+
+    await authController.logout(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.mockedClearCookie).toHaveBeenCalled();
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+  })
+
+  it(`Should fail to remove cookie successfully`, async () => {
+    const mockedRequest = mockRequest<LogoutUserPayload>();
+    const mockedResponse = mockResponse();
+    mockedResponse.mockedClearCookie.mockImplementationOnce(() => {
+      throw new Error();
+    });
+    await authController.logout(mockedRequest, mockedResponse);
+    expect(mockedResponse.status).toHaveBeenCalledWith(500);
+    expect(mockedResponse.json).toHaveBeenCalledWith({
+      status: 'error',
+      error: 'Something went wrong, please try again!'
+    });
   });
 });
