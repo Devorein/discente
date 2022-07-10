@@ -3,7 +3,7 @@ import { incrementTokenVersionById, loginUser, registerUser } from '../models';
 import { ApiResponse, GetCurrentUserResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
 import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields } from '../utils';
 
-export const authController = {
+const authController = {
   register: async (
     req: Request<any, any, RegisterUserPayload>,
     res: Response<ApiResponse<RegisterUserResponse>>
@@ -59,3 +59,5 @@ export const authController = {
     }
   }
 }
+
+export default authController;
