@@ -10,7 +10,7 @@ export function expectUserApiResponse(
     username = '',
     name = '',
     status = "public",
-    avatar = ''
+    avatar = null
   }: Partial<Pick<UserWithoutSecretFields, 'avatar' | 'email' | 'username' | 'name' | "status">>,
   apiResponse: SuccessApiResponse<UserWithoutSecretFields>
 ) {
@@ -36,7 +36,7 @@ export function expectUserResponse(
     username = '',
     name = '',
     status = 'public',
-    avatar = ''
+    avatar = null
   }: Partial<Pick<UserWithoutSecretFields, 'email' | 'username' | 'name' | 'avatar' | 'status'>>,
   response: UserWithoutSecretFields
 ) {

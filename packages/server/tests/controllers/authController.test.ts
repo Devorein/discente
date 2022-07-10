@@ -1,16 +1,11 @@
 import { User } from '@prisma/client';
 import { v4 } from 'uuid';
 import { UniqueConstraintViolationError } from '../../src/ApiError';
-import { prisma } from '../../src/config';
 import authController from '../../src/controllers/authController';
 import { registerUser } from '../../src/models/User';
 import { RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
-import hashPassword from '../../src/utils/hashPassword';
 import { mockRequest, mockResponse } from '../helpers/mocks';
 import { expectUserResponse } from '../helpers/user';
-
-// test this user for login, registration
-let privateUser: User;
 
 // test this user for updating
 let activeUser: UserWithoutSecretFields;
@@ -18,17 +13,6 @@ let activeUser: UserWithoutSecretFields;
 const userPassword = 'Secret123$$';
 
 beforeAll(async () => {
-  const userId = v4();
-  privateUser = (await prisma.user.create({
-    data: {
-      id: userId,
-      email: `${v4()}@gmail.com`,
-      hashedPass: await hashPassword(userPassword),
-      username: v4(),
-      name: "John Doe Private"
-    }
-  }));
-
   activeUser = await registerUser({
     email: `${v4()}@gmail.com`,
     password: userPassword,
