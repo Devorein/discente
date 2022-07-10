@@ -89,9 +89,38 @@ const loginUserConstants: ApiConstants<LoginUserPayload> & FormConstants<LoginUs
   submitButtonText: 'Login'
 };
 
+const logoutUserConstants: ApiConstants = {
+  endpoint: 'auth/logout',
+  key: () => ['logout'],
+  successMessage: 'Successfully logged out!'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
+  logoutUser: logoutUserConstants,
   loginUser: loginUserConstants
 };
 
+export const siteMetadata = {
+  copyrightText: '© 2022 Discente All rights reserved.',
+  brand: { image: '/favicon.ico', width: 25, text: 'Discente' },
+  footerLinks: [
+    {
+      href: '/privacy',
+      label: 'Privacy'
+    },
+    {
+      href: '/terms',
+      label: 'Terms'
+    },
+    {
+      href: '/blog',
+      label: 'Blog'
+    },
+    {
+      href: '/support',
+      label: 'Support'
+    }
+  ]
+};

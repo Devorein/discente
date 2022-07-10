@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { ReactNode } from 'react';
 import { QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import Navbar from './Navbar';
 import Providers from './Providers';
 import RouteGuard from './RouteGuard';
 
@@ -25,10 +26,13 @@ export default function Document({
         <Paper
           elevation={0}
           sx={{
+            height: 'calc(100vh - 32.5px)',
             borderRadius: 0,
-            p: 2
+            p: 2,
+            overflowY: 'auto'
           }}
         >
+          <Navbar />
           <RouteGuard>
             <>
               {children}
