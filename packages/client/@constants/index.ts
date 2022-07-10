@@ -102,3 +102,25 @@ export const apiConstants = {
   loginUser: loginUserConstants
 };
 
+export const siteMetadata = {
+  copyrightText: '© 2022 Discente All rights reserved.',
+  brand: { image: '/favicon.ico', width: 25, text: 'Discente' },
+  footerLinks: [
+    {
+      href: '/privacy',
+      label: 'Privacy'
+    },
+    {
+      href: '/terms',
+      label: 'Terms'
+    },
+    {
+      href: '/blog',
+      label: 'Blog'
+    },
+    {
+      href: '/support',
+      label: 'Support'
+    }
+  ]
+};
