@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
 import { CookieOptions, Response } from "express";
-import { sign } from "jsonwebtoken";
-import { CLIENT_URL, COOKIE_NAME, JWT_ALGORITHM, JWT_SECRET, NODE_ENV } from "../config";
+import { CLIENT_URL, COOKIE_NAME, NODE_ENV } from "../config";
 import { UserJWTPayload } from "../types";
+import { signToken } from "./token";
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
@@ -10,20 +10,6 @@ const cookieOptions: CookieOptions = {
   sameSite: 'strict',
   domain: new URL(CLIENT_URL as string).hostname as string
 };
-
-/**
- * Signs token based on given payload
- * @param payload to sign
- * @returns the signed token
- */
-export function signToken<Payload extends Record<string, any>>(
-  payload: Payload
-) {
-  return sign(payload, JWT_SECRET, {
-    algorithm: JWT_ALGORITHM,
-    expiresIn: '1d'
-  });
-}
 
 /**
  * Adds user authenticated cookie to response
