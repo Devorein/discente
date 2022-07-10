@@ -6,7 +6,7 @@ import {
   LoginUserPayload,
   RegisterUserPayload
 } from '../../src/types';
-import { hashPassword } from "../../src/utils";
+import { getUserToken, hashPassword } from "../../src/utils";
 import { createSupertestAssertions } from '../helpers/supertest';
 
 const { assertSupertestErrorRequest, assertSupertestSuccessRequest, router } = createSupertestAssertions()
@@ -15,6 +15,7 @@ router.use('/auth', authRouter);
 
 let user: User;
 const userPassword = 'Secret123$';
+let userToken: string;
 
 beforeAll(async () => {
   user = await registerUser({
@@ -23,6 +24,7 @@ beforeAll(async () => {
     username: v4().slice(0, 10),
     name: 'John Doe'
   })
+  userToken = getUserToken(user)
 })
 
 describe('POST /auth/register', () => {
@@ -71,6 +73,24 @@ describe('POST /auth/login', () => {
         usernameOrEmail: user.username,
         password: userPassword
       }
+    })
+  })
+})
+
+describe.only('POST /auth/logout', () => {
+  it(`Should fail if no cookie is passed`, async () => {
+    await assertSupertestErrorRequest({
+      endpoint: 'auth/logout',
+      method: "post",
+      statusCode: 401,
+    })
+  })
+
+  it.only(`Should pass if cookie is passed`, async () => {
+    await assertSupertestSuccessRequest({
+      endpoint: 'auth/logout',
+      method: "post",
+      cookie: userToken
     })
   })
 })
