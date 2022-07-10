@@ -172,3 +172,29 @@ describe('authController.logout', () => {
     });
   });
 });
+
+describe('authController.me', () => {
+  it(`Should succeed on valid cookie for user`, async () => {
+    const mockedRequest = mockRequest<LoginUserPayload>({
+      user: {
+        username: activeUser.username,
+        email: activeUser.email,
+        name: activeUser.name,
+        // This should be removed
+        hashedPass: '123'
+      }
+    });
+    const mockedResponse = mockResponse();
+    await authController.me(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    expect(mockedResponse.json).toHaveBeenCalledWith({
+      status: 'success',
+      data: {
+        username: activeUser.username,
+        email: activeUser.email,
+        name: activeUser.name
+      }
+    });
+  });
+});
