@@ -1,15 +1,19 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import { IncorrectPasswordError, UniqueConstraintViolationError, UserNotFoundError } from "../../src/ApiError";
-import { loginUser, registerUser } from "../../src/models";
+import { IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
+import { prisma } from "../../src/config";
+import { changePasswordById, loginUser, registerUser } from "../../src/models";
 import { RegisterUserPayload } from "../../src/types";
+import { hashPassword } from "../../src/utils";
 import { getError } from "../helpers/errors";
 import { expectUserResponse } from "../helpers/user";
 
+let privateUser: User;
 
 // test this user for login, registration
 let activeUser: User;
 const userPassword = 'Secret123$';
+const differentPassword = 'terces321';
 
 beforeAll(async () => {
   activeUser = await registerUser({
@@ -17,6 +21,17 @@ beforeAll(async () => {
     password: userPassword,
     username: `${v4()}1`,
     name: "John Doe"
+  });
+
+  const userId = v4();
+  privateUser = await prisma.user.create({
+    data: {
+      id: userId,
+      email: `${v4()}@gmail.com`,
+      hashedPass: await hashPassword(userPassword),
+      username: `${v4()}1`,
+      name: "John Doe"
+    }
   });
 });
 
@@ -77,5 +92,34 @@ describe('loginUser', () => {
     );
     expect(error.message).toBe(UserNotFoundError.message);
     expect(error.statusCode).toBe(UserNotFoundError.statusCode);
+  });
+});
+
+describe('changePasswordById', () => {
+  it('should throw error on invalid id', async () => {
+    const error = await getError(async () =>
+      changePasswordById(activeUser.id.substring(8), differentPassword)
+    );
+    expect(error.message).toBe(
+      UpdateFailedError.messageConstructor('password')
+    );
+    expect(error.statusCode).toBe(UpdateFailedError.statusCode);
+  });
+
+  it(`should throw error if user doesn't exist`, async () => {
+    const error = await getError(async () =>
+      changePasswordById(v4(), differentPassword)
+    );
+    expect(error.message).toBe(UserNotFoundError.message);
+    expect(error.statusCode).toBe(UserNotFoundError.statusCode);
+  });
+
+  it('should update password properly', async () => {
+    const updatedUser = await changePasswordById(
+      privateUser.id,
+      differentPassword
+    );
+
+    expect(updatedUser.tokenVersion).toBe(privateUser.tokenVersion + 1);
   });
 });
