@@ -40,3 +40,41 @@ export function loginUserPayloadSchema() {
     .strict()
     .noUnknown();
 }
+
+export function changeUserPasswordPayloadSchema() {
+  return yup
+    .object()
+    .shape({
+      currentPassword: yup.string().required('Current Password is required!'),
+      newPassword: yup.string().required('New Password is required!')
+    })
+    .test(
+      'Equal Passwords',
+      'Passwords should not be the same',
+      (obj) => obj.currentPassword !== obj.newPassword
+    )
+    .strict()
+    .noUnknown();
+}
+
+export function changeUserPasswordClientPayloadSchema() {
+  return yup
+    .object()
+    .shape({
+      currentPassword: yup.string().required('Current Password is required!'),
+      newPassword: yup
+        .string()
+        .required('New Password is required!')
+        .when('currentPassword', (currentPassword, schema) =>
+          schema.notOneOf([currentPassword], 'Passwords should not be the same')
+        ),
+      confirmNewPassword: yup
+        .string()
+        .required('Confirm New Password is required!')
+        .when('newPassword', (newPassword, schema) =>
+          schema.oneOf([newPassword], 'Please confirm password')
+        )
+    })
+    .strict()
+    .noUnknown();
+}

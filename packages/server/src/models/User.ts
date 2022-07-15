@@ -52,6 +52,30 @@ export async function loginUser(
   return user;
 }
 
+export async function changePasswordById(id: string, password: string) {
+  const hashedPass = await hashPassword(password);
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        hashedPass,
+        tokenVersion: {
+          increment: 1
+        }
+      }
+    });
+    return user;
+  } catch (err) {
+    if (err.code === 'P2025') {
+      throw new UserNotFoundError();
+    } else {
+      throw new UpdateFailedError('password');
+    }
+  }
+}
+
 export async function incrementTokenVersionById(
   userId: string
 ) {

@@ -1,10 +1,10 @@
 import { User } from '@prisma/client';
 import { v4 } from 'uuid';
-import { UniqueConstraintViolationError, UserNotFoundError } from '../../src/ApiError';
+import { IncorrectPasswordError, UniqueConstraintViolationError, UserNotFoundError } from '../../src/ApiError';
 import { prisma } from '../../src/config';
 import authController from '../../src/controllers/authController';
 import { registerUser } from '../../src/models/User';
-import { LoginUserPayload, LogoutUserPayload, RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
+import { ChangeUserPasswordPayload, LoginUserPayload, LogoutUserPayload, RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
 import { hashPassword } from '../../src/utils';
 import { mockRequest, mockResponse } from '../helpers/mocks';
 import { expectUserResponse } from '../helpers/user';
@@ -13,6 +13,7 @@ import { expectUserResponse } from '../helpers/user';
 let activeUser: UserWithoutSecretFields;
 
 const userPassword = 'Secret123$$';
+const differentPassword = 'Terces321$$';
 
 // test this user for login, registration
 let privateUser: User;
@@ -37,7 +38,6 @@ beforeAll(async () => {
     name: 'John Doe Public'
   });
 });
-
 
 describe('authController.register', () => {
   it(`Should fail if email is already taken`, async () => {
@@ -196,5 +196,50 @@ describe('authController.me', () => {
         name: activeUser.name
       }
     });
+  });
+});
+
+describe('authController.changePassword', () => {
+  it('should not update on incorrect password', async () => {
+    const mockedRequest = mockRequest<ChangeUserPasswordPayload>({
+      body: {
+        currentPassword: differentPassword,
+        newPassword: userPassword
+      },
+      user: {
+        hashedPass: privateUser.hashedPass
+      }
+    });
+    const mockedResponse = mockResponse();
+    await authController.changePassword(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.status).toHaveBeenCalledWith(
+      IncorrectPasswordError.statusCode
+    );
+    expect(mockedResponse.json).toHaveBeenCalledWith({
+      status: 'error',
+      error: IncorrectPasswordError.message
+    });
+  });
+
+  it('should update password correctly and remove auth cookies', async () => {
+    const mockedRequest = mockRequest<ChangeUserPasswordPayload>({
+      body: {
+        currentPassword: userPassword,
+        newPassword: differentPassword
+      },
+      user: {
+        hashedPass: privateUser.hashedPass,
+        id: privateUser.id
+      }
+    });
+    const mockedResponse = mockResponse();
+    await authController.changePassword(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.mockedClearCookie).toHaveBeenCalled();
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    const mockedResponseData = mockedResponse.mockedJson.mock
+      .calls[0][0] as SuccessApiResponse<null>;
+    expect(mockedResponseData.status).toBe('success');
   });
 });

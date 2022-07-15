@@ -1,7 +1,8 @@
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { incrementTokenVersionById, loginUser, registerUser } from '../models';
-import { ApiResponse, GetCurrentUserResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
-import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields } from '../utils';
+import { changePasswordById, incrementTokenVersionById, loginUser, registerUser } from '../models';
+import { ApiResponse, ChangeUserPasswordPayload, GetCurrentUserResponse, LoginUserPayload, LoginUserResponse, LogoutUserPayload, RegisterUserPayload, RegisterUserResponse } from '../types';
+import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields, verifyPassword } from '../utils';
 
 const authController = {
   register: async (
@@ -42,6 +43,21 @@ const authController = {
       return handleSuccess<undefined>(res, undefined);
     } catch (err) {
       return handleError(res, err);
+    }
+  },
+
+  changePassword: async (
+    req: Request<any, any, ChangeUserPasswordPayload>,
+    res: Response<ApiResponse<undefined>>
+  ) => {
+    try {
+      const user = req.user as User;
+      await verifyPassword(user.hashedPass!, req.body.currentPassword);
+      await changePasswordById(user.id, req.body.newPassword);
+      removeCookieFromResponse(res);
+      handleSuccess(res, undefined);
+    } catch (err) {
+      handleError(res, err);
     }
   },
 

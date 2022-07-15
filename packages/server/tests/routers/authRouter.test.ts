@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import { registerUser } from "../../src/models";
 import authRouter from "../../src/routers/authRouter";
 import {
+  ChangeUserPasswordPayload,
   LoginUserPayload,
   RegisterUserPayload
 } from '../../src/types';
@@ -108,6 +109,43 @@ describe('GET /auth/me', () => {
     await assertSupertestSuccessRequest({
       endpoint: 'auth/me',
       method: "get",
+      cookie: userToken
+    })
+  })
+})
+
+describe('PUT /auth/change-password', () => {
+  it(`Should fail if incorrect payload is passed`, async () => {
+    await assertSupertestErrorRequest({
+      endpoint: 'auth/change-password',
+      method: "put",
+      statusCode: 400,
+      payload: {
+        unknown: "123"
+      }
+    })
+  })
+
+  it(`Should fail if no cookie is passed`, async () => {
+    await assertSupertestErrorRequest<ChangeUserPasswordPayload>({
+      endpoint: 'auth/change-password',
+      method: "put",
+      statusCode: 401,
+      payload: {
+        currentPassword: "123",
+        newPassword: "Secret123$"
+      }
+    })
+  })
+
+  it(`Should pass if cookie is passed`, async () => {
+    await assertSupertestSuccessRequest<ChangeUserPasswordPayload>({
+      endpoint: 'auth/logout',
+      method: "post",
+      payload: {
+        currentPassword: userPassword,
+        newPassword: `${userPassword}123`
+      },
       cookie: userToken
     })
   })
