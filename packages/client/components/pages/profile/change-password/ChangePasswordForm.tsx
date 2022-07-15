@@ -1,7 +1,7 @@
+import { changeUserPasswordClientPayloadSchema } from '@discente/shared';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { changeUserPasswordClientPayloadSchema } from '@reinforz/shared';
 import { ChangeUserPasswordPayload } from '@types';
 import {
   useChangeUserPasswordMutation,
