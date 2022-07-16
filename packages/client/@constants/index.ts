@@ -89,7 +89,7 @@ const loginUserConstants: ApiConstants<LoginUser['payload']> & FormConstants<Log
   },
   onLoadButtonText: 'Logging in...',
   submitButtonText: 'Login',
-  formHeaderText: 'Log in',
+  formHeaderText: 'Log in to your account',
   formHeaderHelperText:
     'Welcome back to Discente! Please log in to your account to continue using the app'
 };

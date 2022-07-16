@@ -8,7 +8,7 @@ import StyledLink from '../StyledLink';
 
 export default function NavbarDropdown() {
   const { currentUser } = useCurrentUser<true>();
-  const currentAvatar = currentUser.profile.avatar;
+  const currentAvatar = currentUser.avatar;
   const currName = currentUser.name
     ?.split(' ')
     .reduce(
