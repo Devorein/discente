@@ -2,14 +2,14 @@ import { apiConstants } from '@constants';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { LoginUserPayload } from '@types';
+import { LoginUser } from '@types';
 import { useLoginUserMutation, useLoginUserMutationCache } from 'api';
 import { CheckboxInput, PasswordInput, TextInput } from 'components';
 import { Form, Formik } from 'formik';
 import { useLocalStorage } from 'hooks';
 
 export interface LoginFormProps {
-  initialValues?: LoginUserPayload;
+  initialValues?: LoginUser['payload'];
 }
 
 export default function LoginForm({
