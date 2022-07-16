@@ -1,9 +1,10 @@
+import { siteMetadata } from '@constants';
 import { Paper } from '@mui/material';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import { QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Navbar from './Navbar';
+import Navbar from './Navbar/Navbar';
 import Providers from './Providers';
 import RouteGuard from './RouteGuard';
 
@@ -19,17 +20,18 @@ export default function Document({
   return (
     <>
       <Head>
-        <link rel='icon' href='/discente.ico' />
+        <link rel='icon' href={siteMetadata.brand.image} />
         <title>Discente</title>
       </Head>
       <Providers queryClient={queryClient}>
         <Paper
           elevation={0}
           sx={{
-            height: 'calc(100vh - 32.5px)',
+            height: 'calc(100vh)',
             borderRadius: 0,
-            p: 2,
-            overflowY: 'auto'
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column'
           }}
         >
           <Navbar />

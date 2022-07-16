@@ -62,7 +62,7 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
   onLoadButtonText: 'Signing up...',
   formHeaderText: 'Create an account',
   formHeaderHelperText:
-    'Welcome to Reinforz, please register your account to start using the app'
+    'Welcome to Discente, please register your account to start using the app'
 };
 
 const loginUserConstants: ApiConstants<LoginUser['payload']> & FormConstants<LoginUser['payload']> = {
@@ -91,7 +91,7 @@ const loginUserConstants: ApiConstants<LoginUser['payload']> & FormConstants<Log
   submitButtonText: 'Login',
   formHeaderText: 'Log in',
   formHeaderHelperText:
-    'Welcome back to Reinforz! Please log in to your account to continue using the app'
+    'Welcome back to Discente! Please log in to your account to continue using the app'
 };
 
 const logoutUserConstants: ApiConstants = {
