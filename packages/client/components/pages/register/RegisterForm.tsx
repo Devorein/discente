@@ -1,14 +1,20 @@
 import { apiConstants } from '@constants';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
-import { RegisterUserPayload } from '@types';
+import { RegisterUser } from '@types';
 import { useRegisterUserMutation, useRegisterUserMutationCache } from 'api';
-import { PasswordInput, TextInput } from 'components';
+import {
+  CenteredText,
+  Logo,
+  PasswordInput,
+  StyledLink,
+  TextInput
+} from 'components';
 import { Form, Formik } from 'formik';
 
 export interface RegisterFormProps {
-  initialValues?: RegisterUserPayload;
+  initialValues?: RegisterUser['payload'];
 }
 
 export default function RegisterForm({
@@ -16,6 +22,8 @@ export default function RegisterForm({
 }: RegisterFormProps) {
   const { isLoading, mutateAsync } = useRegisterUserMutation();
   const registerUserMutationCacheFn = useRegisterUserMutationCache();
+
+  const sideColor = useTheme().palette.mode === 'dark' ? '#dddddd' : '#222222';
 
   return (
     <Formik
@@ -33,52 +41,125 @@ export default function RegisterForm({
       initialValues={initialValues}
     >
       {({ isSubmitting, isValid }) => (
-        <Form>
-          <Typography variant='h4'>
-            {apiConstants.registerUser.formHeaderText}
-          </Typography>
-          <Stack gap={1}>
-            <TextInput
-              autoFocus
-              label={apiConstants.registerUser.label.name}
-              disabled={isSubmitting}
-              placeholder={apiConstants.registerUser.placeholder.name}
-              name='name'
-            />
-            <TextInput
-              label={apiConstants.registerUser.label.username}
-              disabled={isSubmitting}
-              placeholder={apiConstants.registerUser.placeholder.username}
-              name='username'
-              sx={{}}
-            />
-            <TextInput
-              label={apiConstants.registerUser.label.email}
-              disabled={isSubmitting}
-              placeholder={apiConstants.registerUser.placeholder.email}
-              name='email'
-            />
-            <PasswordInput
-              label={apiConstants.registerUser.label.password}
-              disabled={isSubmitting}
-              placeholder={apiConstants.registerUser.placeholder.password}
-              name='password'
-            />
-          </Stack>
-          {isLoading ? (
-            <LoadingButton disabled>
-              {apiConstants.registerUser.onLoadButtonText}
-            </LoadingButton>
-          ) : (
-            <Button
-              aria-label='register'
-              type='submit'
-              disabled={isSubmitting || !isValid}
+        <Grid container display='flex' width='100%' flexGrow={1}>
+          <Grid
+            item
+            md={6}
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Form
+              style={{
+                height: 'fit-content',
+                maxWidth: 450
+              }}
             >
-              {apiConstants.registerUser.submitButtonText}
-            </Button>
-          )}
-        </Form>
+              <Box my={3}>
+                <Logo
+                  sx={{
+                    my: 2
+                  }}
+                />
+                <Stack gap={1} mb={1} flexDirection='row' alignItems='center'>
+                  <Typography variant='h4'>
+                    {apiConstants.registerUser.formHeaderText}
+                  </Typography>
+                </Stack>
+                <Typography
+                  variant='subtitle1'
+                  sx={{
+                    opacity: 0.75
+                  }}
+                >
+                  {apiConstants.registerUser.formHeaderHelperText}
+                </Typography>
+                <Divider
+                  sx={{
+                    my: 2
+                  }}
+                />
+              </Box>
+              <Stack gap={2} mb={2}>
+                <TextInput
+                  autoFocus
+                  label={apiConstants.registerUser.label.name}
+                  disabled={isSubmitting}
+                  placeholder={apiConstants.registerUser.placeholder.name}
+                  name='name'
+                />
+                <TextInput
+                  required
+                  label={apiConstants.registerUser.label.username}
+                  disabled={isSubmitting}
+                  placeholder={apiConstants.registerUser.placeholder.username}
+                  name='username'
+                />
+                <TextInput
+                  required
+                  label={apiConstants.registerUser.label.email}
+                  disabled={isSubmitting}
+                  placeholder={apiConstants.registerUser.placeholder.email}
+                  name='email'
+                />
+                <PasswordInput
+                  label={apiConstants.registerUser.label.password}
+                  disabled={isSubmitting}
+                  placeholder={apiConstants.registerUser.placeholder.password}
+                  helperText='Must contain uppercase, lowercase, digits and symbols'
+                  name='password'
+                />
+              </Stack>
+              <CenteredText my={2}>
+                <Typography variant='subtitle2'>
+                  By submitting this form you agree with our{' '}
+                </Typography>
+                <StyledLink href='/terms' highlight>
+                  Terms of Service
+                </StyledLink>{' '}
+                and{' '}
+                <StyledLink href='/privacy' highlight>
+                  Privacy Policy
+                </StyledLink>
+              </CenteredText>
+              <Stack flexDirection='row' justifyContent='space-between' mb={3}>
+                {isLoading ? (
+                  <LoadingButton disabled>
+                    {apiConstants.registerUser.onLoadButtonText}
+                  </LoadingButton>
+                ) : (
+                  <Button
+                    aria-label='register'
+                    type='submit'
+                    variant='contained'
+                    disabled={isSubmitting || !isValid}
+                  >
+                    {apiConstants.registerUser.submitButtonText}
+                  </Button>
+                )}
+              </Stack>
+
+              <CenteredText>
+                <Typography variant='subtitle2'>
+                  Already have an account?{' '}
+                </Typography>
+                <StyledLink href='/login' highlight>
+                  Sign in
+                </StyledLink>
+              </CenteredText>
+            </Form>
+          </Grid>
+          <Grid item md={6}>
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                flexGrow: 1,
+                backgroundColor: sideColor
+              }}
+            />
+          </Grid>
+        </Grid>
       )}
     </Formik>
   );

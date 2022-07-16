@@ -37,7 +37,7 @@
     ],
     "paths": {
       "@types": [
-        "../server/src/types.ts"
+        "../server/src/types/index.ts"
       ],
       "api": [
         "./api"
