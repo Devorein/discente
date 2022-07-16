@@ -46,3 +46,9 @@ export type PaginatedUsers = Paginated<UserWithoutSecretFields>;
 export type GetPaginatedUsers = ApiRequest<PaginationPayload, PaginatedUsers>;
 
 export type GetCurrentUser = ApiRequest<null, UserWithoutSecretFields>;
+
+type ChangeUserPasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+};
+export type ChangeUserPassword = ApiRequest<ChangeUserPasswordPayload>;

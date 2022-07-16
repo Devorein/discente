@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import { changeUserPasswordClientPayloadSchema, loginUserPayloadSchema, registerUserPayloadSchema } from '@discente/shared';
-import { ChangeUserPasswordPayload, LoginUserPayload, RegisterUserPayload } from '@types';
+import { ChangeUserPassword, LoginUser, RegisterUser } from '@types';
 import { BaseSchema } from 'yup';
 
 export const SERVER_URL =
@@ -30,9 +30,10 @@ type FormConstants<Payload extends Record<string, any>> = {
   submitButtonText: string
   onLoadButtonText: string
   formHeaderText: string
+  formHeaderHelperText: string;
 }
 
-const registerUserConstants: ApiConstants<RegisterUserPayload> & FormConstants<RegisterUserPayload> = {
+const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstants<RegisterUser['payload']> = {
   endpoint: 'auth/register',
   payloadFactory: () => {
     return {
@@ -57,12 +58,14 @@ const registerUserConstants: ApiConstants<RegisterUserPayload> & FormConstants<R
     password: '********',
     username: 'john_doe'
   },
-  submitButtonText: 'Register',
-  onLoadButtonText: 'Registering...',
-  formHeaderText: 'Create an account'
+  submitButtonText: 'Sign up',
+  onLoadButtonText: 'Signing up...',
+  formHeaderText: 'Create an account',
+  formHeaderHelperText:
+    'Welcome to Reinforz, please register your account to start using the app'
 };
 
-const loginUserConstants: ApiConstants<LoginUserPayload> & FormConstants<LoginUserPayload> = {
+const loginUserConstants: ApiConstants<LoginUser['payload']> & FormConstants<LoginUser['payload']> = {
   endpoint: 'auth/login',
   payloadFactory: () => {
     return {
@@ -84,9 +87,11 @@ const loginUserConstants: ApiConstants<LoginUserPayload> & FormConstants<LoginUs
     password: '********',
     remember: 'Remember me'
   },
-  formHeaderText: 'Login To Your Account',
   onLoadButtonText: 'Logging in...',
-  submitButtonText: 'Login'
+  submitButtonText: 'Login',
+  formHeaderText: 'Log in',
+  formHeaderHelperText:
+    'Welcome back to Reinforz! Please log in to your account to continue using the app'
 };
 
 const logoutUserConstants: ApiConstants = {
@@ -96,7 +101,7 @@ const logoutUserConstants: ApiConstants = {
 };
 
 const changeUserPasswordConstants: ApiConstants<
-  ChangeUserPasswordPayload & {
+  ChangeUserPassword['payload'] & {
     confirmNewPassword: string;
   }
 > = {
@@ -121,7 +126,7 @@ export const apiConstants = {
 
 export const siteMetadata = {
   copyrightText: '© 2022 Discente All rights reserved.',
-  brand: { image: '/favicon.ico', width: 25, text: 'Discente' },
+  brand: { image: '/logo.svg', width: 25, text: 'Discente' },
   footerLinks: [
     {
       href: '/privacy',

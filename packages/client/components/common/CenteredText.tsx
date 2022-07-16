@@ -1,7 +1,7 @@
 import { Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
-export function CenteredText({
+export default function CenteredText({
   children,
   component,
   ...props
