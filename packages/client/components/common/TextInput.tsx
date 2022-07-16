@@ -17,6 +17,7 @@ export default function TextInput({
   rows = 1,
   fullWidth = true,
   name,
+  required,
   ...props
 }: TextInputProps) {
   const [field, { error, touched }, { setTouched }] = useField(name);
@@ -25,8 +26,12 @@ export default function TextInput({
 
   const labelField = label ? (
     <FormLabelWithHelper
-      error={touched ? error : undefined}
+      required={required}
+      error={
+        touched && error ? (error.includes('required') ? '' : error) : undefined
+      }
       label={label}
+      helperText={helperText}
       name={field.name}
     />
   ) : null;
@@ -47,7 +52,6 @@ export default function TextInput({
         {...field}
         {...props}
       />
-      {helperText || null}
     </FormControl>
   );
 }

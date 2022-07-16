@@ -4,20 +4,31 @@ import { useState } from 'react';
 import TextInput, { TextInputProps } from './TextInput';
 
 export default function PasswordInput(props: TextInputProps) {
-  const [isShowingPassword, setIsShowingPassword] = useState(false);
+  const [isShowingPass, setIsShowingPass] = useState(false);
 
   const handleClickShowPassword = () => {
-    setIsShowingPassword((prev) => !prev);
+    setIsShowingPass((prev) => !prev);
   };
 
   return (
     <TextInput
-      type={isShowingPassword ? 'text' : 'password'}
+      required
+      type={isShowingPass ? 'text' : 'password'}
       InputProps={{
+        sx: {
+          'input::placeholder': {
+            top: 4,
+            position: 'relative'
+          }
+        },
         endAdornment: (
           <InputAdornment position='end'>
             <IconButton onClick={handleClickShowPassword}>
-              {isShowingPassword ? <Visibility /> : <VisibilityOff />}
+              {isShowingPass ? (
+                <Visibility fontSize='small' />
+              ) : (
+                <VisibilityOff fontSize='small' />
+              )}
             </IconButton>
           </InputAdornment>
         )
