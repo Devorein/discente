@@ -1,7 +1,9 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { changePasswordById, incrementTokenVersionById, loginUser, registerUser } from '../models';
-import { ChangeUserPassword, GetCurrentUser, LoginUser, LogoutUser, RegisterUser } from '../types';
+import { CLIENT_URL } from '../config';
+import * as googleOAuth from '../libs/oauth/google';
+import { changePasswordById, createUserUnlessExists, incrementTokenVersionById, loginUser, registerUser } from '../models';
+import { ApiResponse, ChangeUserPassword, GetCurrentUser, LoginUser, LogoutUser, RegisterUser } from '../types';
 import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields, verifyPassword } from '../utils';
 
 const authController = {
@@ -72,6 +74,39 @@ const authController = {
       return handleSuccess<GetCurrentUser['data']>(res, loggedInUser);
     } catch (err) {
       return handleError(res, err);
+    }
+  },
+
+  googleOauth: async (req: Request, res: Response<ApiResponse<undefined>>) => {
+    try {
+      const code = req.query.code as string;
+      // get the id and access token with the code
+      const { id_token, access_token } = await googleOAuth.getGoogleOAuthTokens(
+        code
+      );
+
+      // get user with tokens
+      const googleUser = await googleOAuth.getGoogleUser(
+        id_token,
+        access_token
+      );
+
+      // upsert the user
+      const { user } = await createUserUnlessExists({
+        email: googleUser.email,
+        name: googleUser.name,
+        avatar: googleUser.picture
+      });
+
+      addCookieToResponse(res, user, true, {
+        google: access_token
+      });
+      res.status(200);
+      res.redirect(CLIENT_URL);
+    } catch (err) {
+      removeCookieFromResponse(res);
+      res.status(err.statusCode || 401);
+      res.redirect(CLIENT_URL);
     }
   }
 }
