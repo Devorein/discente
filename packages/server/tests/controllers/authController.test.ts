@@ -1,7 +1,8 @@
 import { User } from '@prisma/client';
 import { v4 } from 'uuid';
+import { getGoogleOAuthTokensFn, getGoogleUserFn } from '../../mocks/mockGoogleOAuth';
 import { IncorrectPasswordError, UniqueConstraintViolationError, UserNotFoundError } from '../../src/ApiError';
-import { prisma } from '../../src/config';
+import { CLIENT_URL, prisma } from '../../src/config';
 import authController from '../../src/controllers/authController';
 import { registerUser } from '../../src/models/User';
 import { ChangeUserPassword, LoginUser, LogoutUser, RegisterUser, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
@@ -241,5 +242,101 @@ describe('authController.changePassword', () => {
     const mockedResponseData = mockedResponse.mockedJson.mock
       .calls[0][0] as SuccessApiResponse<null>;
     expect(mockedResponseData.status).toBe('success');
+  });
+});
+
+describe('authController.googleOauth', () => {
+  it(`Should login as existing user`, async () => {
+    const code = 'code';
+    const id_token = 'id_token';
+    const access_token = 'access_token';
+
+    getGoogleOAuthTokensFn.mockReturnValueOnce({
+      id_token,
+      access_token
+    });
+
+    getGoogleUserFn.mockReturnValueOnce({
+      email: activeUser.email,
+      name: activeUser.name,
+      avatar: activeUser.avatar
+    });
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(getGoogleOAuthTokensFn).toHaveBeenCalledWith(code);
+    expect(getGoogleUserFn).toHaveBeenCalledWith(id_token, access_token);
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    expect(mockedResponse.cookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
+  });
+
+  it(`Should register as a new user`, async () => {
+    const code = 'code';
+    const id_token = 'id_token';
+    const access_token = 'access_token';
+
+    const email = `${v4().slice(0, 10)}@gmail.com`;
+    const name = v4();
+
+    getGoogleOAuthTokensFn.mockReturnValueOnce({
+      id_token,
+      access_token
+    });
+
+    getGoogleUserFn.mockReturnValueOnce({
+      email,
+      name
+    });
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(getGoogleOAuthTokensFn).toHaveBeenCalledWith(code);
+    expect(getGoogleUserFn).toHaveBeenCalledWith(id_token, access_token);
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    expect(mockedResponse.cookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
+    expect(
+      await prisma.user.findUnique({
+        where: {
+          email
+        }
+      })
+    ).not.toBeNull();
+  });
+
+  it(`Should remove cookie from response for any error`, async () => {
+    const code = 'code';
+    getGoogleOAuthTokensFn.mockRejectedValueOnce(new Error());
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.status).toHaveBeenCalledWith(401);
+    expect(mockedResponse.clearCookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
   });
 });
