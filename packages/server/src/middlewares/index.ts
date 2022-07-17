@@ -1,9 +1,11 @@
-import isAuthenticated from "./authentication";
 import logger from "./logger";
 import validateData from "./validateData";
 
+export * from "./authentication";
 export {
-  isAuthenticated,
   validateData,
   logger
 };
+
+
+
