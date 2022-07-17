@@ -1,0 +1,73 @@
+name: "Install dependencies"
+description: "Install dependencies by checking cache and linking required packages"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache root dependencies
+      id: cache_root_node_modules
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: root-node-modules-${{ hashFiles('package-lock.json') }}
+    - name: Cache `@reinforz/shared` dependencies
+      id: cache_shared_node_modules
+      uses: actions/cache@v2
+      with:
+        path: ./packages/shared/node_modules
+        key: shared-node-modules-${{ hashFiles('./packages/shared/package-lock.json') }}
+    - name: Cache `@reinforz/server` dependencies
+      id: cache_server_node_modules
+      uses: actions/cache@v2
+      with:
+        path: ./packages/server/node_modules
+        key: server-node-modules-${{ hashFiles('./packages/server/package-lock.json') }}
+    - name: Cache `@reinforz/client` dependencies
+      id: cache_client_node_modules
+      uses: actions/cache@v2
+      with:
+        path: ./packages/client/node_modules
+        key: client-node-modules-${{ hashFiles('./packages/client/package-lock.json') }}
+    - name: Install root dependencies
+      shell: bash
+      if: steps.cache_root_node_modules.outputs.cache-hit != 'true'
+      run: npm install --no-audit --no-fund
+    - name: Install @reinforz/shared dependencies
+      shell: bash
+      if: steps.cache_shared_node_modules.outputs.cache-hit != 'true'
+      run: |
+        cd packages/shared
+        npm install --no-audit --no-fund
+        cd ../../
+    - name: Install @reinforz/server dependencies
+      shell: bash
+      if: steps.cache_server_node_modules.outputs.cache-hit != 'true'
+      run: |
+        cd packages/server
+        npm install --no-audit --no-fund
+        cd ../../
+    - name: Install @reinforz/client dependencies
+      shell: bash
+      if: steps.cache_client_node_modules.outputs.cache-hit != 'true'
+      run: |
+        cd packages/client
+        npm install --no-audit --no-fund
+        cd ../../
+    - name: Install @reinforz/shared globally
+      shell: bash
+      run: |
+        cd packages/shared
+        npm install -g
+        cd ../../
+    - name: Link @reinforz/shared package
+      shell: bash
+      run: |
+        # Hack to get current @reinforz/shared package
+        cd packages/server
+        npm link @reinforz/shared
+        cd ../client
+        npm link @reinforz/shared
+    - name: Install zx globally
+      shell: bash
+      run: |
+        npm install zx -g
