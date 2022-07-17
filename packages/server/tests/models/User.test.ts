@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
 import { prisma } from "../../src/config";
 import { changePasswordById, loginUser, registerUser } from "../../src/models";
-import { RegisterUserPayload } from "../../src/types";
+import { RegisterUser } from "../../src/types";
 import { hashPassword } from "../../src/utils";
 import { getError } from "../helpers/errors";
 import { expectUserResponse } from "../helpers/user";
@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 describe('registerUser', () => {
   it(`Should register user with name`, async () => {
-    const registerUserPayload: RegisterUserPayload = {
+    const registerUserPayload: RegisterUser['payload'] = {
       email: `${v4()}@gmail.com`,
       password: 'secret123',
       username: v4(),

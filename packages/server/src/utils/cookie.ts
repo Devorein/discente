@@ -28,7 +28,7 @@ export const addCookieToResponse = (
     username,
     email,
     role,
-    tokenVersion
+    tokenVersion,
   });
   res.cookie(COOKIE_NAME, token, {
     ...cookieOptions,

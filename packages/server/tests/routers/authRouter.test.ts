@@ -2,11 +2,7 @@ import { User } from "@prisma/client";
 import { v4 } from "uuid";
 import { registerUser } from "../../src/models";
 import authRouter from "../../src/routers/authRouter";
-import {
-  ChangeUserPasswordPayload,
-  LoginUserPayload,
-  RegisterUserPayload
-} from '../../src/types';
+import { ChangeUserPassword, LoginUser, RegisterUser } from "../../src/types";
 import { getUserToken, hashPassword } from "../../src/utils";
 import { createSupertestAssertions } from '../helpers/supertest';
 
@@ -41,7 +37,7 @@ describe('POST /auth/register', () => {
   })
 
   it(`Should pass if payload is correct`, async () => {
-    await assertSupertestSuccessRequest<RegisterUserPayload>({
+    await assertSupertestSuccessRequest<RegisterUser['payload']>({
       endpoint: 'auth/register',
       method: "post",
       payload: {
@@ -67,7 +63,7 @@ describe('POST /auth/login', () => {
   })
 
   it(`Should pass if correct payload is passed`, async () => {
-    await assertSupertestSuccessRequest<LoginUserPayload>({
+    await assertSupertestSuccessRequest<LoginUser['payload']>({
       endpoint: 'auth/login',
       method: "post",
       payload: {
@@ -127,7 +123,7 @@ describe('PUT /auth/change-password', () => {
   })
 
   it(`Should fail if no cookie is passed`, async () => {
-    await assertSupertestErrorRequest<ChangeUserPasswordPayload>({
+    await assertSupertestErrorRequest<ChangeUserPassword['payload']>({
       endpoint: 'auth/change-password',
       method: "put",
       statusCode: 401,
@@ -139,7 +135,7 @@ describe('PUT /auth/change-password', () => {
   })
 
   it(`Should pass if cookie is passed`, async () => {
-    await assertSupertestSuccessRequest<ChangeUserPasswordPayload>({
+    await assertSupertestSuccessRequest<ChangeUserPassword['payload']>({
       endpoint: 'auth/logout',
       method: "post",
       payload: {

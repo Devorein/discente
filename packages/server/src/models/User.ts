@@ -2,11 +2,11 @@ import { User } from "@prisma/client";
 import { v4 } from "uuid";
 import ApiError, { UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
 import { prisma } from "../config";
-import { LoginUserPayload, RegisterUserPayload } from "../types";
+import { LoginUser, RegisterUser } from "../types";
 import { hashPassword, verifyPassword } from "../utils";
 
 export async function registerUser(
-  payload: RegisterUserPayload
+  payload: RegisterUser['payload']
 ) {
   const hashedPassword = await hashPassword(payload.password);
   try {
@@ -32,7 +32,7 @@ export async function registerUser(
 }
 
 export async function loginUser(
-  payload: LoginUserPayload
+  payload: LoginUser['payload']
 ) {
   const { password, usernameOrEmail } = payload;
   const user = await prisma.user.findFirst({
@@ -48,7 +48,7 @@ export async function loginUser(
     }
   });
   if (!user) throw new UserNotFoundError();
-  await verifyPassword(user.hashedPass, password);
+  await verifyPassword(user.hashedPass as string, password);
   return user;
 }
 
@@ -96,5 +96,43 @@ export async function incrementTokenVersionById(
     } else {
       throw new UpdateFailedError('tokenVersion');
     }
+  }
+}
+
+export async function createUserUnlessExists(
+  googleUser: Partial<User>
+) {
+  try {
+    const id = v4();
+    const user = (await prisma.user.upsert({
+      create: {
+        id,
+        email: googleUser.email!,
+        username: googleUser.username || v4(),
+        name: googleUser.name ?? v4(),
+        avatar: googleUser.avatar
+      },
+      update: {},
+      where: {
+        email: googleUser.email
+      },
+    }));
+    if (user.id === id) {
+      return {
+        user,
+        registered: true
+      };
+    }
+    return {
+      user,
+      registered: false
+    };
+  } catch (err) {
+    if (err.code === 'P2002') {
+      const target = err.meta.target[0];
+      throw new UniqueConstraintViolationError('user', target);
+    }
+
+    throw new ApiError();
   }
 }
