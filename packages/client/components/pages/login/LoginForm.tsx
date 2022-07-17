@@ -47,7 +47,7 @@ export default function LoginForm({
       initialValues={initialValues}
     >
       {({ isSubmitting, isValid }) => (
-        <Grid container display='flex' width='100%' flexGrow={1}>
+        <Grid container display='flex' width='100%' height='100%' flexGrow={1}>
           <Grid
             item
             md={6}

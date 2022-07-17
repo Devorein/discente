@@ -1,5 +1,5 @@
 import { API_VERSION, SERVER_URL } from '@constants';
-import { ApiResponse, ErrorApiResponse } from '@types';
+import { ApiRequest, ErrorApiResponse } from '@types';
 import axios, { AxiosError } from 'axios';
 import {
   QueryKey,
@@ -8,25 +8,20 @@ import {
   UseQueryResult
 } from 'react-query';
 
-export function useApiQuery<
-  ResponseData,
-  ModifiedData = ApiResponse<ResponseData>
->(
+export function useApiQuery<QueryApi extends ApiRequest<any, any> = ApiRequest>(
   key: QueryKey,
   endpoint: string,
   useQueryOptions?: Omit<
-    UseQueryOptions<ApiResponse<ResponseData>, Error, ModifiedData>,
+    UseQueryOptions<QueryApi['response'], Error, QueryApi['response']>,
     'queryFn'
   >
-): UseQueryResult<ModifiedData, Error> {
-  return useQuery<ApiResponse<ResponseData>, Error, ModifiedData>({
+): UseQueryResult<QueryApi['response'], Error> {
+  return useQuery<QueryApi['response'], Error, QueryApi['response']>({
     ...useQueryOptions,
     queryKey: useQueryOptions?.queryKey ?? key,
     async queryFn() {
       try {
-        const { data: response } = await axios.request<
-          ApiResponse<ResponseData>
-        >({
+        const { data: response } = await axios.request<QueryApi['response']>({
           url: `${SERVER_URL}/${API_VERSION}/${endpoint}`,
           method: 'GET',
           withCredentials: true
@@ -35,8 +30,7 @@ export function useApiQuery<
           throw new Error(response.error.toString());
         }
         return response;
-      }
-      catch (err: any) {
+      } catch (err: any) {
         throw new Error(
           (
             err as AxiosError<ErrorApiResponse>

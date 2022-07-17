@@ -1,35 +1,21 @@
-import {
-  apiConstants
-} from '@constants';
-import { LoginUserPayload, LoginUserResponse } from '@types';
+import { apiConstants } from '@constants';
+import { GetCurrentUser, LoginUser } from '@types';
 import { useGetCurrentUserQueryData } from 'api';
 import { useApiMutation, usePostMutation } from 'hooks';
 
 export function useLoginUserMutationCache() {
-  const postMutationFn = usePostMutation<LoginUserPayload, LoginUserResponse>(
-    apiConstants.loginUser.successMessage
-  );
-  const getCurrentUserQueryDataFn = useGetCurrentUserQueryData();
-
-  return (
-    postCacheUpdateCb?: (mutationResponse: LoginUserResponse) => void
-  ) => {
-    return postMutationFn((mutationResponse) => {
-      getCurrentUserQueryDataFn(() => {
-        return {
-          status: 'success',
-          data: mutationResponse
-        };
-      });
-      if (postCacheUpdateCb) {
-        postCacheUpdateCb(mutationResponse);
-      }
-    });
-  };
+  return usePostMutation<LoginUser, GetCurrentUser>({
+    successMessage: apiConstants.loginUser.successMessage,
+    queryDataFn: useGetCurrentUserQueryData(),
+    cacheUpdate: (mutationResponseData) => ({
+      status: 'success',
+      data: mutationResponseData
+    })
+  });
 }
 
 export function useLoginUserMutation() {
-  return useApiMutation<LoginUserResponse, LoginUserPayload>(
+  return useApiMutation<LoginUser>(
     apiConstants.loginUser.key(),
     apiConstants.loginUser.endpoint
   );

@@ -1,3 +1,4 @@
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { useLogoutUserMutation, useLogoutUserMutationCache } from 'api';
 import { silentlyUpdateURL } from 'utils';
@@ -14,6 +15,7 @@ export default function LogoutButton({ allDevices = false }: LogoutProps) {
     <Button
       disabled={isLoading}
       color='inherit'
+      variant='outlined'
       onClick={async () => {
         await mutateAsync(
           { allDevices },
@@ -24,6 +26,7 @@ export default function LogoutButton({ allDevices = false }: LogoutProps) {
           })
         );
       }}
+      startIcon={<LogoutIcon fontSize='small' />}
     >
       {allDevices ? 'Logout of all devices' : 'Logout'}
     </Button>

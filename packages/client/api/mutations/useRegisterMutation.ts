@@ -1,35 +1,21 @@
-import {
-  apiConstants
-} from '@constants';
-import { RegisterUserPayload, RegisterUserResponse } from '@types';
+import { apiConstants } from '@constants';
+import { GetCurrentUser, RegisterUser } from '@types';
 import { useGetCurrentUserQueryData } from 'api';
 import { useApiMutation, usePostMutation } from 'hooks';
 
 export function useRegisterUserMutationCache() {
-  const postMutationFn = usePostMutation<
-    RegisterUserPayload,
-    RegisterUserResponse
-  >(apiConstants.registerUser.successMessage);
-  const currentUserQueryDataFn = useGetCurrentUserQueryData();
-  return (
-    postCacheUpdateCb?: (mutationResponse: RegisterUserResponse) => void
-  ) => {
-    return postMutationFn((mutationResponse) => {
-      currentUserQueryDataFn(() => {
-        return {
-          status: 'success',
-          data: mutationResponse
-        };
-      });
-      if (postCacheUpdateCb) {
-        postCacheUpdateCb(mutationResponse);
-      }
-    });
-  };
+  return usePostMutation<RegisterUser, GetCurrentUser>({
+    successMessage: apiConstants.registerUser.successMessage,
+    queryDataFn: useGetCurrentUserQueryData(),
+    cacheUpdate: (mutationResponse) => ({
+      status: 'success',
+      data: mutationResponse
+    })
+  });
 }
 
 export function useRegisterUserMutation() {
-  return useApiMutation<RegisterUserResponse, RegisterUserPayload>(
+  return useApiMutation<RegisterUser>(
     apiConstants.registerUser.key(),
     apiConstants.registerUser.endpoint
   );

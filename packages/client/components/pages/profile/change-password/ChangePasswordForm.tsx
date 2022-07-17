@@ -2,7 +2,7 @@ import { changeUserPasswordClientPayloadSchema } from '@discente/shared';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { ChangeUserPasswordPayload } from '@types';
+import { ChangeUserPassword } from '@types';
 import {
   useChangeUserPasswordMutation,
   useChangeUserPasswordMutationCache
@@ -10,7 +10,7 @@ import {
 import { PasswordInput } from 'components';
 import { Form, Formik } from 'formik';
 
-const changeUserPasswordPayloadFactory = (): ChangeUserPasswordPayload & {
+const changeUserPasswordPayloadFactory = (): ChangeUserPassword['payload'] & {
   confirmNewPassword: string;
 } => {
   return {
@@ -21,7 +21,7 @@ const changeUserPasswordPayloadFactory = (): ChangeUserPasswordPayload & {
 };
 
 export interface ChangePasswordFormProps {
-  initialValues?: ChangeUserPasswordPayload & {
+  initialValues?: ChangeUserPassword['payload'] & {
     confirmNewPassword: string;
   };
 }
