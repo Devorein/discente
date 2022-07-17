@@ -10,19 +10,19 @@ runs:
       with:
         path: ./node_modules
         key: root-node-modules-${{ hashFiles('package-lock.json') }}
-    - name: Cache `@reinforz/shared` dependencies
+    - name: Cache `@discente/shared` dependencies
       id: cache_shared_node_modules
       uses: actions/cache@v2
       with:
         path: ./packages/shared/node_modules
         key: shared-node-modules-${{ hashFiles('./packages/shared/package-lock.json') }}
-    - name: Cache `@reinforz/server` dependencies
+    - name: Cache `@discente/server` dependencies
       id: cache_server_node_modules
       uses: actions/cache@v2
       with:
         path: ./packages/server/node_modules
         key: server-node-modules-${{ hashFiles('./packages/server/package-lock.json') }}
-    - name: Cache `@reinforz/client` dependencies
+    - name: Cache `@discente/client` dependencies
       id: cache_client_node_modules
       uses: actions/cache@v2
       with:
@@ -32,41 +32,41 @@ runs:
       shell: bash
       if: steps.cache_root_node_modules.outputs.cache-hit != 'true'
       run: npm install --no-audit --no-fund
-    - name: Install @reinforz/shared dependencies
+    - name: Install @discente/shared dependencies
       shell: bash
       if: steps.cache_shared_node_modules.outputs.cache-hit != 'true'
       run: |
         cd packages/shared
         npm install --no-audit --no-fund
         cd ../../
-    - name: Install @reinforz/server dependencies
+    - name: Install @discente/server dependencies
       shell: bash
       if: steps.cache_server_node_modules.outputs.cache-hit != 'true'
       run: |
         cd packages/server
         npm install --no-audit --no-fund
         cd ../../
-    - name: Install @reinforz/client dependencies
+    - name: Install @discente/client dependencies
       shell: bash
       if: steps.cache_client_node_modules.outputs.cache-hit != 'true'
       run: |
         cd packages/client
         npm install --no-audit --no-fund
         cd ../../
-    - name: Install @reinforz/shared globally
+    - name: Install @discente/shared globally
       shell: bash
       run: |
         cd packages/shared
         npm install -g
         cd ../../
-    - name: Link @reinforz/shared package
+    - name: Link @discente/shared package
       shell: bash
       run: |
-        # Hack to get current @reinforz/shared package
+        # Hack to get current @discente/shared package
         cd packages/server
-        npm link @reinforz/shared
+        npm link @discente/shared
         cd ../client
-        npm link @reinforz/shared
+        npm link @discente/shared
     - name: Install zx globally
       shell: bash
       run: |

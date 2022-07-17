@@ -1,0 +1,46 @@
+name: "Test source code"
+description: Test source code for all packages & upload coverage report to codecov
+inputs:
+  client_updated:
+    description: "Check if client package code was updated"
+    required: true
+  server_updated:
+    description: "Check if server package code was updated"
+    required: true
+  shared_updated:
+    description: "Check if shared package code was updated"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup test database
+      if: inputs.server_updated == 'true'
+      shell: bash
+      run: npm run setup-db:test
+    - name: Test code
+      shell: bash
+      run: |
+        export FORCE_COLOR=3
+        zx scripts/test/test-v1.js --quiet
+      env:
+        CLIENT_UPDATED: ${{ inputs.client_updated }}
+        SERVER_UPDATED: ${{ inputs.server_updated }}
+        SHARED_UPDATED: ${{ inputs.shared_updated }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+    - name: Upload server coverage to Codecov
+      uses: codecov/codecov-action@v2
+      if: inputs.server_updated == 'true'
+      with:
+        fail_ci_if_error: true
+        files: ./packages/server/coverage/lcov.info
+        flags: server
+        verbose: true
+    - name: Upload client coverage to Codecov
+      uses: codecov/codecov-action@v2
+      if: inputs.client_updated == 'true'
+      with:
+        fail_ci_if_error: true
+        files: ./packages/client/coverage/lcov.info
+        flags: client
+        verbose: true
