@@ -56,3 +56,8 @@ type ChangeUserPasswordPayload = {
   newPassword: string;
 };
 export type ChangeUserPassword = ApiRequest<ChangeUserPasswordPayload>;
+
+type LogoutUserPayload = {
+  allDevices?: boolean;
+};
+export type LogoutUser = ApiRequest<LogoutUserPayload>;

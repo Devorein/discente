@@ -1,28 +1,18 @@
 import { apiConstants } from '@constants';
-import { LogoutUserPayload } from '@types';
+import { GetCurrentUser, LogoutUser } from '@types';
 import { useGetCurrentUserQueryData } from 'api';
 import { useApiMutation, usePostMutation } from 'hooks';
 
 export function useLogoutUserMutationCache() {
-  const postMutationFn = usePostMutation<LogoutUserPayload, undefined>(
-    apiConstants.logoutUser.successMessage
-  );
-  const getCurrentUserQueryDataFn = useGetCurrentUserQueryData();
-
-  return (postCacheUpdateCb?: () => void) => {
-    return postMutationFn(() => {
-      getCurrentUserQueryDataFn(() => {
-        return null;
-      });
-      if (postCacheUpdateCb) {
-        postCacheUpdateCb();
-      }
-    });
-  };
+  return usePostMutation<LogoutUser, GetCurrentUser>({
+    successMessage: apiConstants.logoutUser.successMessage,
+    queryDataFn: useGetCurrentUserQueryData(),
+    cacheUpdate: () => null
+  });
 }
 
 export function useLogoutUserMutation() {
-  return useApiMutation<undefined, LogoutUserPayload>(
+  return useApiMutation<LogoutUser>(
     apiConstants.logoutUser.key(),
     apiConstants.logoutUser.endpoint
   );
