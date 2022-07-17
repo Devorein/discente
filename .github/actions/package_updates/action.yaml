@@ -1,0 +1,53 @@
+name: "Detect package code changes"
+description: Detect if any package code changed and set outputs accordingly
+outputs:
+  no-change:
+    description: "Detect if any code change occurred or not"
+    value: ${{ steps.set_outputs.outputs.no-change }}
+  client_updated:
+    description: "Detect if any client package code change occurred or not"
+    value: ${{ steps.package_updates.outputs.client }}
+  server_updated:
+    description: "Detect if any server package code change occurred or not"
+    value: ${{ steps.package_updates.outputs.server }}
+  shared_updated:
+    description: "Detect if any shared package code change occurred or not"
+    value: ${{ steps.package_updates.outputs.shared }}
+runs:
+  using: "composite"
+  steps:
+    - name: Check if any packages were modified
+      uses: dorny/paths-filter@v2
+      id: package_updates
+      with:
+        filters: |
+          client:
+            - 'packages/client/**'
+          server:
+            - 'packages/server/src/**'
+            - 'packages/server/prisma/**'
+            - 'packages/server/tests/**'
+            - 'packages/server/package.json'
+          shared:
+            - 'packages/shared/src/**'
+            - 'packages/shared/package.json'
+    - name: Set outputs based on package code updates
+      id: set_outputs
+      shell: bash
+      run: |
+        NO_CHANGE='true'
+        if [[ $SHARED_UPDATED = true ]];
+        then
+          NO_CHANGE='false'
+        elif [[ $SERVER_UPDATED = true ]];
+        then
+          NO_CHANGE='false'
+        elif [[ $CLIENT_UPDATED = true ]];
+        then
+          NO_CHANGE='false'
+        fi
+        echo "::set-output name=no-change::$(echo $NO_CHANGE)"
+      env:
+        CLIENT_UPDATED: ${{ steps.package_updates.outputs.client }}
+        SERVER_UPDATED: ${{ steps.package_updates.outputs.server }}
+        SHARED_UPDATED: ${{ steps.package_updates.outputs.shared }}
