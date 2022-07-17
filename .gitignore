@@ -126,3 +126,4 @@ old
 .vscode
 .vercel
 todo.md
+!scripts/build
