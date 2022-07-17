@@ -1,19 +1,15 @@
-import { ApiResponse } from '@types';
+import { ApiRequest } from '@types';
 import { QueryKey, useQueryClient } from 'react-query';
+import { QueryCacheHitFn } from 'types';
 
-export function useQueryClientSetData<ResponseData>() {
+export function useQueryClientSetData<
+  QueryApi extends ApiRequest<any, any> = ApiRequest
+>(queryKey: QueryKey): (queryCacheHitFn: QueryCacheHitFn<QueryApi>) => void {
   const queryClient = useQueryClient();
-  return (
-    queryKey: QueryKey,
-    cacheHitCb: (
-      queryResponse: ApiResponse<ResponseData> | null | undefined
-    ) => ApiResponse<ResponseData> | null | undefined
-  ) => {
-    queryClient.setQueriesData<ApiResponse<ResponseData> | null | undefined>(
+  return (cacheHitCb) => {
+    queryClient.setQueriesData<QueryApi['response'] | null | undefined>(
       queryKey,
-      (queryResponse) => {
-        return cacheHitCb(queryResponse);
-      }
+      (queryResponse) => cacheHitCb(queryResponse)
     );
   };
 }
