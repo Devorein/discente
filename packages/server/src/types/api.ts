@@ -15,14 +15,18 @@ export type ApiResponse<Data> = SuccessApiResponse<Data> | ErrorApiResponse;
 export type Paginated<Data> = {
   items: Data[];
   total: number;
+  next: null | string;
 };
 
-export type PaginationPayload = {
-  page: number;
-  itemsPerPage: number;
+export type PaginationPayload = Record<string, any> & {
+  cursor: string | null;
+  take: number;
 };
 
-interface ApiRequest<Payload = null | undefined, Data = null | undefined> {
+export interface ApiRequest<
+  Payload = null | undefined,
+  Data = null | undefined
+> {
   payload: Payload;
   data: Data;
   response: ApiResponse<Data>;
