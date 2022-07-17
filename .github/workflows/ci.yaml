@@ -43,7 +43,6 @@ jobs:
           client_updated: ${{ steps.package_updates.outputs.client_updated }}
           server_updated: ${{ steps.package_updates.outputs.server_updated }}
           shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
-          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
       - name: Lint code
         if: steps.package_updates.outputs.no-change == 'false'
         uses: ./.github/actions/lint
@@ -51,7 +50,6 @@ jobs:
           client_updated: ${{ steps.package_updates.outputs.client_updated }}
           server_updated: ${{ steps.package_updates.outputs.server_updated }}
           shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
-          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
       - name: Test code
         if: steps.package_updates.outputs.no-change == 'false'
         uses: ./.github/actions/test
@@ -59,4 +57,3 @@ jobs:
           client_updated: ${{ steps.package_updates.outputs.client_updated }}
           server_updated: ${{ steps.package_updates.outputs.server_updated }}
           shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
-          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
