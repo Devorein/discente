@@ -1,7 +1,6 @@
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["linux-musl", "darwin", "native"]
-  previewFeatures = ["filterJson"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["linux-musl", "darwin", "native"]
 }
 
 datasource db {
@@ -23,7 +22,7 @@ model User {
   id           String     @id @default(uuid()) @db.Uuid
   email        String     @unique
   username     String     @unique
-  hashedPass   String
+  hashedPass   String?
   name         String
   role         UserRole   @default(user)
   createdAt    DateTime   @default(now())
