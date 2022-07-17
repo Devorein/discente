@@ -1,0 +1,26 @@
+name: "Lint source code"
+description: Dynamically lint source code based on package code changes
+inputs:
+  client_updated:
+    description: "Check if client package code was updated"
+    required: true
+  server_updated:
+    description: "Check if server package code was updated"
+    required: true
+  shared_updated:
+    description: "Check if shared package code was updated"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Lint code
+      shell: bash
+      run: |
+        export FORCE_COLOR=3
+        zx scripts/lint/lint-v1.js --quiet
+      env:
+        CLIENT_UPDATED: ${{ inputs.client_updated }}
+        SERVER_UPDATED: ${{ inputs.server_updated }}
+        SHARED_UPDATED: ${{ inputs.shared_updated }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}
