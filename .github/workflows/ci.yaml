@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build, Lint and Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Check package modification
+        id: package_updates
+        uses: ./.github/actions/package_updates
+      - name: Install dependencies
+        if: steps.package_updates.outputs.no-change == 'false'
+        uses: ./.github/actions/install
+      - name: Build code
+        if: steps.package_updates.outputs.no-change == 'false'
+        uses: ./.github/actions/build
+        with:
+          client_updated: ${{ steps.package_updates.outputs.client_updated }}
+          server_updated: ${{ steps.package_updates.outputs.server_updated }}
+          shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
+          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
+      - name: Lint code
+        if: steps.package_updates.outputs.no-change == 'false'
+        uses: ./.github/actions/lint
+        with:
+          client_updated: ${{ steps.package_updates.outputs.client_updated }}
+          server_updated: ${{ steps.package_updates.outputs.server_updated }}
+          shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
+          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
+      - name: Test code
+        if: steps.package_updates.outputs.no-change == 'false'
+        uses: ./.github/actions/test
+        with:
+          client_updated: ${{ steps.package_updates.outputs.client_updated }}
+          server_updated: ${{ steps.package_updates.outputs.server_updated }}
+          shared_updated: ${{ steps.package_updates.outputs.shared_updated }}
+          discord_bot_updated: ${{ steps.package_updates.outputs.discord_bot_updated }}
