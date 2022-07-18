@@ -20,7 +20,7 @@ async function test() {
   const CLIENT_UPDATED = process.env.CLIENT_UPDATED === "true";
 
   await testPackage("server", !SERVER_UPDATED)
-  // await testPackage("client", !CLIENT_UPDATED)
+  await testPackage("client", !CLIENT_UPDATED)
 }
 
 test();

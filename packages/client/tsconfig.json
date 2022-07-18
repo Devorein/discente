@@ -62,8 +62,7 @@
   "exclude": [
     "node_modules",
     "./tests/**/*.ts",
-    "./jest.config.ts",
-    "./mocks/**/*.ts"
+    "./jest.config.ts"
   ],
   "include": [
     "**/*.ts",
