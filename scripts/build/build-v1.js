@@ -1,6 +1,6 @@
 #!usr/bin/env zx
 
-const totalSteps = 5;
+const totalSteps = 6;
 let currentStep = 0;
 const commandWrapper = require("../commandWrapper");
 
@@ -13,9 +13,9 @@ async function cwr(command, skip, message) {
 
 async function buildPackage(package, skip) {
   cd(`${process.env.GITHUB_WORKSPACE}/packages/${package}`)
-  // if (package === "client") {
-  //   await cwr(() => $`npm run build-storybook`, skip, 'build storybook')
-  // }
+  if (package === "client") {
+    await cwr(() => $`npm run build-storybook`, skip, 'build storybook')
+  }
   await cwr(() => $`npm run build`, skip, `build ${package} package`)
 }
 
