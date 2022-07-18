@@ -11,6 +11,7 @@ import {
   StyledLink,
   TextInput
 } from 'components';
+import OAuthBar from 'components/common/OAuthBar';
 import { Form, Formik } from 'formik';
 
 export interface RegisterFormProps {
@@ -41,7 +42,7 @@ export default function RegisterForm({
       initialValues={initialValues}
     >
       {({ isSubmitting, isValid }) => (
-        <Grid container display='flex' width='100%' flexGrow={1}>
+        <Grid container display='flex' width='100%' height='100%' flexGrow={1}>
           <Grid
             item
             md={6}
@@ -137,6 +138,7 @@ export default function RegisterForm({
                     {apiConstants.registerUser.submitButtonText}
                   </Button>
                 )}
+                <OAuthBar />
               </Stack>
 
               <CenteredText>
