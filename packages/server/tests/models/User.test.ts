@@ -2,8 +2,8 @@ import { User } from "@prisma/client";
 import { v4 } from "uuid";
 import { IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
 import { prisma } from "../../src/config";
-import { changePasswordById, loginUser, registerUser } from "../../src/models";
-import { RegisterUserPayload } from "../../src/types";
+import { changePasswordById, createUserUnlessExists, loginUser, registerUser } from "../../src/models";
+import { RegisterUser } from "../../src/types";
 import { hashPassword } from "../../src/utils";
 import { getError } from "../helpers/errors";
 import { expectUserResponse } from "../helpers/user";
@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 describe('registerUser', () => {
   it(`Should register user with name`, async () => {
-    const registerUserPayload: RegisterUserPayload = {
+    const registerUserPayload: RegisterUser['payload'] = {
       email: `${v4()}@gmail.com`,
       password: 'secret123',
       username: v4(),
@@ -121,5 +121,33 @@ describe('changePasswordById', () => {
     );
 
     expect(updatedUser.tokenVersion).toBe(privateUser.tokenVersion + 1);
+  });
+});
+
+describe('createUserUnlessExists', () => {
+  it(`Should create user if it doesn't exist`, async () => {
+    const avatar = 'avatar';
+    const email = 'email';
+    const username = 'username';
+
+    const { registered, user } = await createUserUnlessExists({
+      email,
+      username,
+      avatar
+    });
+
+    expect(user.username).toBe(username);
+    expect(registered).toBe(true);
+  });
+
+  it(`Should not create user if it exist`, async () => {
+    const { registered, user } = await createUserUnlessExists({
+      email: activeUser.email,
+      username: activeUser.username,
+      avatar: activeUser.avatar
+    });
+
+    expect(user.username).toBe(activeUser.username);
+    expect(registered).toBe(false);
   });
 });

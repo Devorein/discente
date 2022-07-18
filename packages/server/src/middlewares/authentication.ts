@@ -5,7 +5,7 @@ import { COOKIE_NAME, JWT_SECRET, prisma } from "../config";
 import { UserJWTPayload } from "../types";
 import { handleError, removeCookieFromResponse } from "../utils";
 
-export default async function isAuthenticated(
+export async function isAuthenticated(
   req: Request,
   res: Response,
   next: NextFunction

@@ -1,10 +1,11 @@
 import { User } from '@prisma/client';
 import { v4 } from 'uuid';
+import { getGoogleOAuthTokensFn, getGoogleUserFn } from '../../mocks/mockGoogleOAuth';
 import { IncorrectPasswordError, UniqueConstraintViolationError, UserNotFoundError } from '../../src/ApiError';
-import { prisma } from '../../src/config';
+import { CLIENT_URL, prisma } from '../../src/config';
 import authController from '../../src/controllers/authController';
 import { registerUser } from '../../src/models/User';
-import { ChangeUserPasswordPayload, LoginUserPayload, LogoutUserPayload, RegisterUserPayload, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
+import { ChangeUserPassword, LoginUser, LogoutUser, RegisterUser, SuccessApiResponse, UserWithoutSecretFields } from '../../src/types';
 import { hashPassword } from '../../src/utils';
 import { mockRequest, mockResponse } from '../helpers/mocks';
 import { expectUserResponse } from '../helpers/user';
@@ -41,7 +42,7 @@ beforeAll(async () => {
 
 describe('authController.register', () => {
   it(`Should fail if email is already taken`, async () => {
-    const mockedRequest = mockRequest<RegisterUserPayload>({
+    const mockedRequest = mockRequest<RegisterUser['payload']>({
       body: {
         email: activeUser.email,
         password: v4(),
@@ -62,13 +63,13 @@ describe('authController.register', () => {
   });
 
   it(`Should register user and set cookies correctly`, async () => {
-    const registerUserPayload: RegisterUserPayload = {
+    const registerUserPayload: RegisterUser['payload'] = {
       email: `${v4()}@gmail.com`,
       password: 'Secret123%%',
       username: v4().slice(0, 12),
       name: "John Doe"
     };
-    const mockedRequest = mockRequest<RegisterUserPayload>({
+    const mockedRequest = mockRequest<RegisterUser['payload']>({
       body: registerUserPayload
     });
     const mockedResponse = mockResponse();
@@ -88,7 +89,7 @@ describe('authController.register', () => {
 
 describe('authController.login', () => {
   it(`Should fail on incorrect username or email`, async () => {
-    const mockedRequest = mockRequest<LoginUserPayload>({
+    const mockedRequest = mockRequest<LoginUser['payload']>({
       body: {
         usernameOrEmail: `x${privateUser.email}`,
         password: userPassword
@@ -107,12 +108,12 @@ describe('authController.login', () => {
   });
 
   it(`Should pass and set cookies correctly if valid email or username and password is provided`, async () => {
-    const loginUserPayload: LoginUserPayload = {
+    const loginUserPayload: LoginUser['payload'] = {
       usernameOrEmail: privateUser.email,
       password: userPassword,
       remember: true
     };
-    const mockedRequest = mockRequest<LoginUserPayload>({
+    const mockedRequest = mockRequest<LoginUser['payload']>({
       body: loginUserPayload
     });
     const mockedResponse = mockResponse();
@@ -136,7 +137,7 @@ describe('authController.login', () => {
 
 describe('authController.logout', () => {
   it(`Should remove cookie successfully`, async () => {
-    const mockedRequest = mockRequest<LogoutUserPayload>();
+    const mockedRequest = mockRequest<LogoutUser['payload']>();
     const mockedResponse = mockResponse();
 
     await authController.logout(mockedRequest, mockedResponse);
@@ -146,7 +147,7 @@ describe('authController.logout', () => {
   });
 
   it(`Should remove cookie successfully when logging out from all devices`, async () => {
-    const mockedRequest = mockRequest<LogoutUserPayload>({
+    const mockedRequest = mockRequest<LogoutUser['payload']>({
       body: { allDevices: true },
       user: { id: privateUser.id }
     });
@@ -159,7 +160,7 @@ describe('authController.logout', () => {
   })
 
   it(`Should fail to remove cookie successfully`, async () => {
-    const mockedRequest = mockRequest<LogoutUserPayload>();
+    const mockedRequest = mockRequest<LogoutUser['payload']>();
     const mockedResponse = mockResponse();
     mockedResponse.mockedClearCookie.mockImplementationOnce(() => {
       throw new Error();
@@ -175,7 +176,7 @@ describe('authController.logout', () => {
 
 describe('authController.me', () => {
   it(`Should succeed on valid cookie for user`, async () => {
-    const mockedRequest = mockRequest<LoginUserPayload>({
+    const mockedRequest = mockRequest<LoginUser['payload']>({
       user: {
         username: activeUser.username,
         email: activeUser.email,
@@ -201,7 +202,7 @@ describe('authController.me', () => {
 
 describe('authController.changePassword', () => {
   it('should not update on incorrect password', async () => {
-    const mockedRequest = mockRequest<ChangeUserPasswordPayload>({
+    const mockedRequest = mockRequest<ChangeUserPassword['payload']>({
       body: {
         currentPassword: differentPassword,
         newPassword: userPassword
@@ -223,7 +224,7 @@ describe('authController.changePassword', () => {
   });
 
   it('should update password correctly and remove auth cookies', async () => {
-    const mockedRequest = mockRequest<ChangeUserPasswordPayload>({
+    const mockedRequest = mockRequest<ChangeUserPassword['payload']>({
       body: {
         currentPassword: userPassword,
         newPassword: differentPassword
@@ -241,5 +242,101 @@ describe('authController.changePassword', () => {
     const mockedResponseData = mockedResponse.mockedJson.mock
       .calls[0][0] as SuccessApiResponse<null>;
     expect(mockedResponseData.status).toBe('success');
+  });
+});
+
+describe('authController.googleOauth', () => {
+  it(`Should login as existing user`, async () => {
+    const code = 'code';
+    const id_token = 'id_token';
+    const access_token = 'access_token';
+
+    getGoogleOAuthTokensFn.mockReturnValueOnce({
+      id_token,
+      access_token
+    });
+
+    getGoogleUserFn.mockReturnValueOnce({
+      email: activeUser.email,
+      name: activeUser.name,
+      avatar: activeUser.avatar
+    });
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(getGoogleOAuthTokensFn).toHaveBeenCalledWith(code);
+    expect(getGoogleUserFn).toHaveBeenCalledWith(id_token, access_token);
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    expect(mockedResponse.cookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
+  });
+
+  it(`Should register as a new user`, async () => {
+    const code = 'code';
+    const id_token = 'id_token';
+    const access_token = 'access_token';
+
+    const email = `${v4().slice(0, 10)}@gmail.com`;
+    const name = v4();
+
+    getGoogleOAuthTokensFn.mockReturnValueOnce({
+      id_token,
+      access_token
+    });
+
+    getGoogleUserFn.mockReturnValueOnce({
+      email,
+      name
+    });
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(getGoogleOAuthTokensFn).toHaveBeenCalledWith(code);
+    expect(getGoogleUserFn).toHaveBeenCalledWith(id_token, access_token);
+    expect(mockedResponse.status).toHaveBeenCalledWith(200);
+    expect(mockedResponse.cookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
+    expect(
+      await prisma.user.findUnique({
+        where: {
+          email
+        }
+      })
+    ).not.toBeNull();
+  });
+
+  it(`Should remove cookie from response for any error`, async () => {
+    const code = 'code';
+    getGoogleOAuthTokensFn.mockRejectedValueOnce(new Error());
+
+    const mockedRequest = mockRequest({
+      query: {
+        code
+      }
+    });
+
+    const mockedResponse = mockResponse();
+
+    await authController.googleOauth(mockedRequest, mockedResponse);
+
+    expect(mockedResponse.status).toHaveBeenCalledWith(401);
+    expect(mockedResponse.clearCookie).toHaveBeenCalled();
+    expect(mockedResponse.redirect).toHaveBeenCalledWith(CLIENT_URL);
   });
 });

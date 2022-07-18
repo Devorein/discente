@@ -12,6 +12,7 @@ import {
   StyledLink,
   TextInput
 } from 'components';
+import OAuthBar from 'components/common/OAuthBar';
 import { Form, Formik } from 'formik';
 import { useLocalStorage } from 'hooks';
 
@@ -130,6 +131,7 @@ export default function LoginForm({
                     {apiConstants.loginUser.submitButtonText}
                   </Button>
                 )}
+                <OAuthBar />
               </Stack>
               <CenteredText>
                 <Typography variant='subtitle2'>

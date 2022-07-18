@@ -20,7 +20,8 @@ const cookieOptions: CookieOptions = {
 export const addCookieToResponse = (
   res: Response,
   user: User,
-  remember?: boolean
+  remember?: boolean,
+  accessTokens?: { google: string },
 ) => {
   const { id, username, email, role, tokenVersion } = user;
   const token = signToken<UserJWTPayload>({
@@ -28,7 +29,8 @@ export const addCookieToResponse = (
     username,
     email,
     role,
-    tokenVersion
+    tokenVersion,
+    accessTokens
   });
   res.cookie(COOKIE_NAME, token, {
     ...cookieOptions,

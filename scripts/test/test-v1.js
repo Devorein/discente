@@ -1,5 +1,5 @@
 #!usr/bin/env zx
-const totalSteps = 2;
+const totalSteps = 1;
 let currentStep = 0;
 const commandWrapper = require("../commandWrapper");
 
@@ -20,7 +20,7 @@ async function test() {
   const CLIENT_UPDATED = process.env.CLIENT_UPDATED === "true";
 
   await testPackage("server", !SERVER_UPDATED)
-  await testPackage("client", !CLIENT_UPDATED)
+  // await testPackage("client", !CLIENT_UPDATED)
 }
 
 test();
