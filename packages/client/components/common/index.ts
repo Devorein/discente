@@ -10,8 +10,10 @@ import PasswordInput from './PasswordInput';
 import Providers from './Providers';
 import StyledLink from './StyledLink';
 import TextInput from './TextInput';
+import ValueSelect from './ValueSelect';
 
 export {
+  ValueSelect,
   LogoutButton,
   ConfirmDialog,
   OAuthBar,
