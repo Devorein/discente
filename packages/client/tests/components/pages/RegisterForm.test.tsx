@@ -6,9 +6,8 @@ import {
   RenderResult,
   waitFor
 } from '@testing-library/react';
+import { Providers, RegisterForm } from 'components';
 import { rest } from 'msw';
-import { Providers } from '../../../components/common';
-import { RegisterForm } from '../../../components/pages';
 import { server } from '../../../jest.setup';
 
 function mockGetCurrentUserRequestResponse() {
