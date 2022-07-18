@@ -2,6 +2,7 @@ import { Avatar, Button, Paper, Typography } from '@mui/material';
 import { LogoutButton } from 'components';
 import { useCurrentUser } from 'contexts';
 import Link from 'next/link';
+import { DeleteAccountButton } from './DeleteAccountButton';
 
 export default function Profile() {
   const { currentUser } = useCurrentUser<true>();
@@ -43,6 +44,7 @@ export default function Profile() {
         <Button>Change your password</Button>
       </Link>
       <LogoutButton allDevices />
+      <DeleteAccountButton />
     </Paper>
   );
 }
