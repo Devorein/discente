@@ -1,0 +1,29 @@
+{
+  "name": "@discente/seeder",
+  "version": "1.0.0",
+  "description": "Database seeder package for discente",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "del-cli ./dist",
+    "start": "node ./dist/index.js",
+    "build": "tsc --sourceMap false --declaration false",
+    "build:watch": "tsc -w",
+    "lint": "npx eslint -c .eslintrc.js . --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "npx prettier \"./src/**/*.(ts|js)\" --write",
+    "lerna-add": "npx lerna add --scope=@discente/seeder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.2.0",
+    "@types/uuid": "^8.3.4"
+  }
+}
