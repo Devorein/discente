@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { v4 } from "uuid";
 import ApiError, { DeleteFailedError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
 import { prisma } from "../config";
-import { LoginUser, RegisterUser } from "../types";
+import { LoginUser, RegisterUser, UpdateUser } from "../types";
 import { hashPassword, verifyPassword } from "../utils";
 
 export async function registerUser(
@@ -50,6 +50,33 @@ export async function loginUser(
   if (!user) throw new UserNotFoundError();
   await verifyPassword(user.hashedPass as string, password);
   return user;
+}
+
+export async function updateUserById(
+  id: string,
+  data: UpdateUser['payload']
+): Promise<User> {
+  try {
+    const user = (await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        name: data.name,
+        email: data.email,
+        username: data.username,
+        status: data.status,
+      }
+    }));
+    return user;
+  } catch (err) {
+    if (err.code === 'P2002') {
+      const target = err.meta.target[0];
+      throw new UniqueConstraintViolationError('user', target);
+    } else {
+      throw new UpdateFailedError('user');
+    }
+  }
 }
 
 export async function changePasswordById(id: string, password: string) {

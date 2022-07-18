@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import {
   UserWithoutSecretFields
 } from './data';
@@ -63,3 +63,7 @@ type LogoutUserPayload = {
 export type LogoutUser = ApiRequest<LogoutUserPayload>;
 
 export type DeleteUser = ApiRequest;
+
+type UpdateUserPayload = Pick<User, 'username' | 'email'> &
+  Partial<Pick<User, 'name' | 'status'>>
+export type UpdateUser = ApiRequest<UpdateUserPayload, UserWithoutSecretFields>;
