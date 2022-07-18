@@ -1,15 +1,16 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import { IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
+import { DeleteFailedError, IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
 import { prisma } from "../../src/config";
-import { changePasswordById, createUserUnlessExists, loginUser, registerUser } from "../../src/models";
+import { changePasswordById, createUserUnlessExists, deleteUserById, loginUser, registerUser } from "../../src/models";
 import { RegisterUser } from "../../src/types";
 import { hashPassword } from "../../src/utils";
 import { getError } from "../helpers/errors";
 import { expectUserResponse } from "../helpers/user";
 
 let privateUser: User;
-
+// user to test delete
+let deletedUser: User;
 // test this user for login, registration
 let activeUser: User;
 const userPassword = 'Secret123$';
@@ -33,6 +34,13 @@ beforeAll(async () => {
       name: "John Doe"
     }
   });
+
+  deletedUser = (await registerUser({
+    email: `${v4()}@gmail.com`,
+    password: userPassword,
+    username: `${v4().slice(10, 20)}1`,
+    name: "John Doe"
+  }));
 });
 
 describe('registerUser', () => {
@@ -149,5 +157,23 @@ describe('createUserUnlessExists', () => {
 
     expect(user.username).toBe(activeUser.username);
     expect(registered).toBe(false);
+  });
+});
+
+describe('deleteUserById', () => {
+  it('should throw error on invalid id', async () => {
+    const error = await getError(async () => deleteUserById('123'));
+    expect(error.message).toBe(DeleteFailedError.messageConstructor('user'));
+    expect(error.statusCode).toBe(DeleteFailedError.statusCode);
+  });
+
+  it(`should throw error if user doesn't exist`, async () => {
+    const error = await getError(async () => deleteUserById(v4()));
+    expect(error.message).toBe(UserNotFoundError.message);
+    expect(error.statusCode).toBe(UserNotFoundError.statusCode);
+  });
+
+  it('should delete user', async () => {
+    await expect(deleteUserById(deletedUser.id)).resolves.not.toThrowError();
   });
 });
