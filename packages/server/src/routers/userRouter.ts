@@ -1,8 +1,16 @@
+import { updateUserPayloadSchema } from "@discente/shared";
 import { Router } from 'express';
 import { userController } from '../controllers';
-import { isAuthenticated } from '../middlewares';
+import { isAuthenticated, validateData } from '../middlewares';
 
 const userRouter = Router();
+
+userRouter.put(
+  '/',
+  validateData(updateUserPayloadSchema()),
+  isAuthenticated,
+  userController.update
+);
 
 userRouter.delete(
   '/',
