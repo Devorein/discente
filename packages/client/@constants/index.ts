@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-import { changeUserPasswordClientPayloadSchema, loginUserPayloadSchema, registerUserPayloadSchema } from '@discente/shared';
-import { ChangeUserPassword, LoginUser, RegisterUser } from '@types';
+import { changeUserPasswordClientPayloadSchema, loginUserPayloadSchema, registerUserPayloadSchema, updateUserPayloadSchema } from '@discente/shared';
+import { ChangeUserPassword, LoginUser, RegisterUser, UpdateUser } from '@types';
 import { BaseSchema } from 'yup';
 
 export const SERVER_URL =
@@ -122,9 +122,39 @@ const deleteUserConstants: ApiConstants = {
   successMessage: 'Successfully deleted user'
 };
 
+type UpdateUserConstants = Omit<
+  ApiConstants<UpdateUser['payload']>,
+  'payloadFactory'
+> &
+  FormConstants<UpdateUser['payload']>;
+
+const updateUserConstants: UpdateUserConstants = {
+  endpoint: 'user',
+  key: () => ['update-user'],
+  validationSchema: updateUserPayloadSchema(),
+  successMessage: 'Successfully Updated User!',
+  label: {
+    email: 'Email',
+    name: 'Full name',
+    status: 'Status',
+    username: 'Username'
+  },
+  placeholder: {
+    email: 'john.doe@gmail.com',
+    name: 'John Doe',
+    username: 'john_doe',
+    status: ''
+  },
+  formHeaderText: 'Update your information',
+  formHeaderHelperText: 'Update your information',
+  onLoadButtonText: 'Updating User',
+  submitButtonText: 'Confirm'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
+  updateUser: updateUserConstants,
   logoutUser: logoutUserConstants,
   loginUser: loginUserConstants,
   deleteUser: deleteUserConstants,
