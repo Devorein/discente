@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { v4 } from "uuid";
-import ApiError, { UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
+import ApiError, { DeleteFailedError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
 import { prisma } from "../config";
 import { LoginUser, RegisterUser } from "../types";
 import { hashPassword, verifyPassword } from "../utils";
@@ -95,6 +95,22 @@ export async function incrementTokenVersionById(
       throw new UserNotFoundError();
     } else {
       throw new UpdateFailedError('tokenVersion');
+    }
+  }
+}
+
+export async function deleteUserById(userId: string) {
+  try {
+    await prisma.user.delete({
+      where: {
+        id: userId
+      }
+    });
+  } catch (err) {
+    if (err.code === 'P2025') {
+      throw new UserNotFoundError();
+    } else {
+      throw new DeleteFailedError('user');
     }
   }
 }

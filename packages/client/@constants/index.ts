@@ -116,11 +116,18 @@ const changeUserPasswordConstants: ApiConstants<
   validationSchema: changeUserPasswordClientPayloadSchema()
 };
 
+const deleteUserConstants: ApiConstants = {
+  endpoint: 'user',
+  key: () => ['delete-user'],
+  successMessage: 'Successfully deleted user'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
   logoutUser: logoutUserConstants,
   loginUser: loginUserConstants,
+  deleteUser: deleteUserConstants,
   changeUserPassword: changeUserPasswordConstants
 };
 

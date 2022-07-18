@@ -61,3 +61,5 @@ type LogoutUserPayload = {
   allDevices?: boolean;
 };
 export type LogoutUser = ApiRequest<LogoutUserPayload>;
+
+export type DeleteUser = ApiRequest;

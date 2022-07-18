@@ -88,3 +88,18 @@ export class UpdateFailedError extends ApiError {
     super(UpdateFailedError.messageConstructor(entity), UpdateFailedError.statusCode)
   }
 }
+
+export class DeleteFailedError extends ApiError {
+  static statusCode: number = 400;
+
+  static messageConstructor(entity: string) {
+    return `Failed to delete ${entity}`;
+  }
+
+  constructor(entity: string) {
+    super(
+      DeleteFailedError.messageConstructor(entity),
+      DeleteFailedError.statusCode
+    );
+  }
+}

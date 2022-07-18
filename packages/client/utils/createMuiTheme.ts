@@ -1,9 +1,10 @@
 import {
   createTheme,
+  darken,
   PaletteMode,
   Theme as MaterialUITheme
 } from '@mui/material';
-import { blue } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 
 declare module '@emotion/react' {
   export interface Theme extends MaterialUITheme { }
@@ -14,7 +15,6 @@ const spacing = (factor: number) => {
 };
 
 export function createMuiTheme(themeMode: PaletteMode) {
-  const secondaryTextColor = themeMode === 'dark' ? '#ddd' : '#888';
   return createTheme({
     palette: {
       mode: themeMode,
@@ -24,6 +24,11 @@ export function createMuiTheme(themeMode: PaletteMode) {
     },
     typography: {
       fontFamily: "'Albert Sans', sans-serif"
+    },
+    transitions: {
+      duration: {
+        short: 250
+      }
     },
     components: {
       MuiAvatar: {
@@ -36,9 +41,23 @@ export function createMuiTheme(themeMode: PaletteMode) {
         }
       },
       MuiTypography: {
+        defaultProps: {
+          variantMapping: {
+            subtitle1: 'span',
+            subtitle2: 'span'
+          }
+        },
         styleOverrides: {
+          h3: {
+            fontSize: '2rem',
+            fontWeight: 600
+          },
           h4: {
             fontSize: '1.75rem',
+            fontWeight: 600
+          },
+          h5: {
+            fontSize: '1.5rem',
             fontWeight: 600
           },
           h6: {
@@ -107,10 +126,30 @@ export function createMuiTheme(themeMode: PaletteMode) {
           }
         }
       },
-      MuiSvgIcon: {
+      MuiTableCell: {
         styleOverrides: {
           root: {
-            color: secondaryTextColor
+            borderBottom: 'none'
+          }
+        }
+      },
+      MuiTableHead: {
+        styleOverrides: {
+          root: {
+            '& .MuiTableCell-root': {
+              backgroundColor:
+                themeMode === 'dark' ? darken(grey[900], 0.1) : grey[300],
+              fontWeight: 600
+            }
+          }
+        }
+      },
+      MuiTableBody: {
+        styleOverrides: {
+          root: {
+            '& .MuiTableRow-root:nth-child(even)': {
+              backgroundColor: themeMode === 'dark' ? grey[900] : grey[100]
+            }
           }
         }
       }
