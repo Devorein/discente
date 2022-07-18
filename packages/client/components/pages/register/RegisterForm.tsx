@@ -88,6 +88,7 @@ export default function RegisterForm({
                   disabled={isSubmitting}
                   placeholder={apiConstants.registerUser.placeholder.name}
                   name='name'
+                  required
                 />
                 <TextInput
                   required
