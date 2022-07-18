@@ -1,4 +1,4 @@
-# `@reinforz/client`
+# `@discente/client`
 
 ## Setup
 
