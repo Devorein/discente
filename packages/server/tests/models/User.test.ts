@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { v4 } from "uuid";
 import { DeleteFailedError, IncorrectPasswordError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../../src/ApiError";
 import { prisma } from "../../src/config";
-import { changePasswordById, createUserUnlessExists, deleteUserById, loginUser, registerUser } from "../../src/models";
+import { changePasswordById, createUserUnlessExists, deleteUserById, loginUser, registerUser, updateUserById } from "../../src/models";
 import { RegisterUser } from "../../src/types";
 import { hashPassword } from "../../src/utils";
 import { getError } from "../helpers/errors";
@@ -13,6 +13,7 @@ let privateUser: User;
 let deletedUser: User;
 // test this user for login, registration
 let activeUser: User;
+let activeUser2: User;
 const userPassword = 'Secret123$';
 const differentPassword = 'terces321';
 
@@ -20,7 +21,14 @@ beforeAll(async () => {
   activeUser = await registerUser({
     email: `${v4()}@gmail.com`,
     password: userPassword,
-    username: `${v4()}1`,
+    username: v4().split("-")[0],
+    name: "John Doe"
+  });
+
+  activeUser2 = await registerUser({
+    email: `${v4()}@gmail.com`,
+    password: userPassword,
+    username: v4().split("-")[0],
     name: "John Doe"
   });
 
@@ -30,7 +38,7 @@ beforeAll(async () => {
       id: userId,
       email: `${v4()}@gmail.com`,
       hashedPass: await hashPassword(userPassword),
-      username: `${v4()}1`,
+      username: v4().split("-")[0],
       name: "John Doe"
     }
   });
@@ -38,7 +46,7 @@ beforeAll(async () => {
   deletedUser = (await registerUser({
     email: `${v4()}@gmail.com`,
     password: userPassword,
-    username: `${v4().slice(10, 20)}1`,
+    username: v4().split("-")[0],
     name: "John Doe"
   }));
 });
@@ -175,5 +183,51 @@ describe('deleteUserById', () => {
 
   it('should delete user', async () => {
     await expect(deleteUserById(deletedUser.id)).resolves.not.toThrowError();
+  });
+});
+
+
+describe('updateUserById', () => {
+  it(`should not work if user doesn't exist`, async () => {
+    const error = await getError(async () =>
+      updateUserById(v4(), {
+        username: activeUser.username,
+        email: activeUser.email,
+        name: 'updated name',
+        status: activeUser.status
+      })
+    );
+
+    expect(error.message).toBe(UpdateFailedError.messageConstructor('user'));
+    expect(error.statusCode).toBe(UpdateFailedError.statusCode);
+  });
+
+  it('should fail if a user with username already exists', async () => {
+    const error = await getError(async () =>
+      updateUserById(activeUser.id, {
+        username: activeUser2.username,
+        email: activeUser.email,
+        name: 'updated name',
+        status: activeUser.status
+      })
+    );
+
+    expect(error.message).toBe(
+      UniqueConstraintViolationError.messageConstructor('user', 'username')
+    );
+    expect(error.statusCode).toBe(UniqueConstraintViolationError.statusCode);
+  });
+
+  it('should update user properly on valid id', async () => {
+    const user = await updateUserById(activeUser2.id, {
+      username: activeUser2.username,
+      email: activeUser2.email,
+      name: 'updated name',
+      status: activeUser2.status
+    });
+    expectUserResponse(
+      { ...activeUser2, name: 'updated name' },
+      user
+    );
   });
 });
