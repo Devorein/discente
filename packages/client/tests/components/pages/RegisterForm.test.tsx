@@ -46,19 +46,19 @@ beforeEach(async () => {
   );
 
   nameTextInputElement = registerFormComponent.getByLabelText(
-    `${apiConstants.registerUser.label.name} *`
+    `${apiConstants.registerUser.label.name}*`
   );
 
   usernameTextInputElement = registerFormComponent.getByLabelText(
-    `${apiConstants.registerUser.label.username} *`
+    `${apiConstants.registerUser.label.username}*`
   );
 
   emailTextInputElement = registerFormComponent.getByLabelText(
-    `${apiConstants.registerUser.label.email} *`
+    `${apiConstants.registerUser.label.email}*`
   );
 
   passwordTextInputElement = registerFormComponent.getByLabelText(
-    `${apiConstants.registerUser.label.password} *`
+    `${apiConstants.registerUser.label.password}*`
   );
 });
 

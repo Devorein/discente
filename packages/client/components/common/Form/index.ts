@@ -1,7 +1,7 @@
 import FormHelperTextComponent from './FieldHelperText';
-import FormLabelComponent from './FieldLabel';
+import FieldLabel from './FieldLabel';
 import PasswordInput from './PasswordInput';
 import SelectInput from './SelectInput';
 import TextInput from './TextInput';
 
-export { TextInput, PasswordInput, SelectInput, FormHelperTextComponent, FormLabelComponent };
+export { TextInput, PasswordInput, SelectInput, FormHelperTextComponent, FieldLabel };

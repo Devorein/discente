@@ -39,6 +39,7 @@ WithInitialValues.args = {
     email: 'john.doe@gmail.com',
     name: 'John Doe',
     password: 'password123',
-    username: 'john_doe'
+    username: 'john_doe',
+    role: 'learner'
   }
 };
