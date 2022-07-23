@@ -18,13 +18,15 @@ beforeAll(async () => {
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: v4().slice(0, 10),
-    name: 'John Doe'
+    name: 'John Doe',
+    role: "learner"
   });
   activeUser2 = await registerUser({
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: v4().slice(0, 10),
-    name: 'John Doe'
+    name: 'John Doe',
+    role: "learner"
   });
   deletedUser = await registerUser({
     email: `${v4()}@gmail.com`,

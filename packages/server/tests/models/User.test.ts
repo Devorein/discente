@@ -26,6 +26,14 @@ beforeAll(async () => {
     role: "learner"
   });
 
+  activeUser2 = await registerUser({
+    email: `${v4()}@gmail.com`,
+    password: userPassword,
+    username: v4().split("-")[0],
+    name: "John Doe",
+    role: "learner"
+  });
+
   const userId = v4();
   privateUser = await prisma.user.create({
     data: {
