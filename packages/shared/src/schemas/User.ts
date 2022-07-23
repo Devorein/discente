@@ -23,7 +23,11 @@ export function registerUserPayloadSchema() {
         .string()
         .required()
         .min(8, 'Must be more than 8 characters')
-        .matches(PASSWORD_REGEX, 'Weak Password')
+        .matches(PASSWORD_REGEX, 'Weak Password'),
+      role: yup
+        .string()
+        .required()
+        .oneOf(["learner", "teacher"])
     })
     .strict()
     .noUnknown();

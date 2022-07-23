@@ -21,7 +21,8 @@ beforeAll(async () => {
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: `${v4()}1`,
-    name: "John Doe"
+    name: "John Doe",
+    role: "learner"
   });
 
   const userId = v4();
@@ -31,7 +32,8 @@ beforeAll(async () => {
       email: `${v4()}@gmail.com`,
       hashedPass: await hashPassword(userPassword),
       username: `${v4()}1`,
-      name: "John Doe"
+      name: "John Doe",
+      role: "learner"
     }
   });
 
@@ -39,7 +41,8 @@ beforeAll(async () => {
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: `${v4().slice(10, 20)}1`,
-    name: "John Doe"
+    name: "John Doe",
+    role: "learner"
   }));
 });
 
@@ -49,7 +52,8 @@ describe('registerUser', () => {
       email: `${v4()}@gmail.com`,
       password: 'secret123',
       username: v4(),
-      name: 'John Doe'
+      name: 'John Doe',
+      role: "learner"
     };
     const registeredUser = await registerUser(registerUserPayload);
     expectUserResponse(registerUserPayload, registeredUser);
@@ -62,7 +66,8 @@ describe('registerUser', () => {
         email: 'john.doe1@gmail.com',
         password: 'secret123',
         username: activeUser.username,
-        name: 'John Doe 1'
+        name: 'John Doe 1',
+        role: "learner"
       })
     );
     expect(error.message).toBe(UniqueConstraintViolationError.messageConstructor('user', 'username'));
