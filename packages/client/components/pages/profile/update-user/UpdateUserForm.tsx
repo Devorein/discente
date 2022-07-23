@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { UpdateUser } from '@types';
 import { useUpdateUserMutation, useUpdateUserMutationCache } from 'api';
-import { TextInput, ValueSelect } from 'components';
+import { SelectInput, TextInput } from 'components';
 import { useCurrentUser } from 'contexts';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
@@ -61,7 +61,7 @@ export default function UpdateUserForm() {
               name='name'
             />
 
-            <ValueSelect
+            <SelectInput
               label={apiConstants.updateUser.label.status}
               disabled={isSubmitting}
               name='status'
