@@ -1,5 +1,5 @@
 #!usr/bin/env zx
-const totalSteps = 1;
+const totalSteps = 2;
 let currentStep = 0;
 const commandWrapper = require("../commandWrapper");
 

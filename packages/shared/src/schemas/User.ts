@@ -61,6 +61,36 @@ export function changeUserPasswordPayloadSchema() {
     .noUnknown();
 }
 
+export function updateUserPayloadSchema() {
+  return yup
+    .object()
+    .shape({
+      email: yup
+        .string()
+        .email('Not a valid email')
+        .max(255)
+        .required()
+        .typeError('Invalid'),
+      username: yup
+        .string()
+        .min(3)
+        .max(36)
+        .trim()
+        .matches(USERNAME_REGEX)
+        .required(),
+      name: yup.string().nullable(),
+      status: yup
+        .string()
+        .required()
+        .oneOf(
+          ['public', 'private', 'banned'],
+          'Status can only be public or private or banned'
+        )
+    })
+    .strict()
+    .noUnknown();
+}
+
 export function changeUserPasswordClientPayloadSchema() {
   return yup
     .object()
