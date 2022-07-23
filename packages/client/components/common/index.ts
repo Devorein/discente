@@ -1,5 +1,4 @@
 import CenteredText from './CenteredText';
-import CheckboxInput from './CheckboxInput';
 import ConfirmDialog from './ConfirmDialog';
 import Document from './Document';
 import Logo from './Logo';
@@ -17,7 +16,6 @@ export {
   CenteredText,
   StyledLink,
   Logo,
-  CheckboxInput,
   Document,
   Providers
 };
