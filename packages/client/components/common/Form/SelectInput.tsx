@@ -1,16 +1,21 @@
 import { FormControl, MenuItem, Select, SelectProps } from '@mui/material';
 import { useField } from 'formik';
-import FormLabelWithHelper from './FieldLabel';
+import FieldLabel from './FieldLabel';
 
-export type SelectInputProps = SelectProps & {
+export type SelectInputProps<T> = SelectProps<T> & {
   helperText?: string;
   name: string;
   label?: string;
   placeholder?: string | number;
-  values: string[];
+  values:
+    | string[]
+    | {
+        value: string;
+        label: string;
+      }[];
 };
 
-export default function SelectInput({
+export default function SelectInput<T extends string>({
   helperText,
   label,
   placeholder,
@@ -20,15 +25,12 @@ export default function SelectInput({
   name,
   values,
   ...props
-}: SelectInputProps) {
+}: SelectInputProps<T>) {
   const [field, { error }] = useField(name);
-
   return (
     <FormControl>
-      {label && (
-        <FormLabelWithHelper error={error} label={label} name={field.name} />
-      )}
-      <Select
+      {label && <FieldLabel error={error} label={label} name={field.name} />}
+      <Select<T>
         fullWidth={fullWidth}
         multiline={multiline}
         rows={rows}
@@ -38,11 +40,17 @@ export default function SelectInput({
         {...field}
         {...props}
       >
-        {values.map((val) => (
-          <MenuItem key={val} value={val}>
-            {val}
-          </MenuItem>
-        ))}
+        {values.map((val) =>
+          typeof val === 'string' ? (
+            <MenuItem key={val} value={val}>
+              {val[0].toUpperCase() + val.slice(1)}
+            </MenuItem>
+          ) : (
+            <MenuItem key={val.value} value={val.value}>
+              {val.label}
+            </MenuItem>
+          )
+        )}
       </Select>
       {helperText || null}
     </FormControl>

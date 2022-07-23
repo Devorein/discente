@@ -1,4 +1,9 @@
-import { FormControl, TextField, TextFieldProps } from '@mui/material';
+import {
+  FormControl,
+  FormControlProps,
+  TextField,
+  TextFieldProps
+} from '@mui/material';
 import { useField } from 'formik';
 import FieldHelperText from './FieldHelperText';
 import FieldLabel from './FieldLabel';
@@ -8,6 +13,7 @@ export type TextInputProps = TextFieldProps & {
   name: string;
   label?: string;
   placeholder?: string | number;
+  formControlProps?: FormControlProps;
 };
 
 export default function TextInput({
@@ -19,6 +25,7 @@ export default function TextInput({
   fullWidth = true,
   name,
   required,
+  formControlProps = {},
   ...props
 }: TextInputProps) {
   const [field, { error, touched }, { setTouched }] = useField(name);
@@ -37,7 +44,7 @@ export default function TextInput({
   ) : null;
 
   return (
-    <FormControl>
+    <FormControl {...formControlProps}>
       {labelField}
       <TextField
         fullWidth={fullWidth}
