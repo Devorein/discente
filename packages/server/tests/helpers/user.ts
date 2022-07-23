@@ -10,8 +10,9 @@ export function expectUserApiResponse(
     username = '',
     name = '',
     status = "public",
-    avatar = null
-  }: Partial<Pick<UserWithoutSecretFields, 'avatar' | 'email' | 'username' | 'name' | "status">>,
+    avatar = null,
+    role = "learner"
+  }: Partial<Pick<UserWithoutSecretFields, 'avatar' | 'email' | 'username' | 'name' | "status" | 'role'>>,
   apiResponse: SuccessApiResponse<UserWithoutSecretFields>
 ) {
   expect(apiResponse).toMatchObject<ApiResponse<UserWithoutSecretFields>>({
@@ -20,7 +21,7 @@ export function expectUserApiResponse(
       username,
       name,
       id: expect.any(String),
-      role: 'user',
+      role,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
       avatar,
@@ -36,8 +37,9 @@ export function expectUserResponse(
     username = '',
     name = '',
     status = 'public',
-    avatar = null
-  }: Partial<Pick<UserWithoutSecretFields, 'email' | 'username' | 'name' | 'avatar' | 'status'>>,
+    avatar = null,
+    role = "learner"
+  }: Partial<Pick<UserWithoutSecretFields, 'email' | 'username' | 'name' | 'avatar' | 'status' | 'role'>>,
   response: UserWithoutSecretFields
 ) {
   expect(response).toMatchObject<UserWithoutSecretFields>({
@@ -45,7 +47,7 @@ export function expectUserResponse(
     username,
     id: expect.any(String),
     name,
-    role: 'user',
+    role,
     status,
     avatar,
     createdAt: expect.any(Date),

@@ -49,7 +49,7 @@ export async function generateUserCreateData(): Promise<UserCreateData> {
       hashedPass: await hashPassword(password),
       createdAt,
       updatedAt,
-      role: 'user'
+      role: faker.datatype.boolean() ? 'learner' : 'teacher'
     },
     password
   };

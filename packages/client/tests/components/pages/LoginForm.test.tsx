@@ -45,11 +45,11 @@ beforeEach(async () => {
 
   // Asterisk to indicate required field
   usernameOrEmailTextInputElement = loginFormComponent.getByLabelText(
-    `${apiConstants.loginUser.label.usernameOrEmail} *`
+    `${apiConstants.loginUser.label.usernameOrEmail}*`
   );
 
   passwordTextInputElement = loginFormComponent.getByLabelText(
-    `${apiConstants.loginUser.label.password} *`
+    `${apiConstants.loginUser.label.password}*`
   );
 });
 

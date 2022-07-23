@@ -28,7 +28,8 @@ beforeAll(async () => {
       hashedPass: await hashPassword(userPassword),
       username: v4(),
       status: 'private',
-      name: "John Doe Private"
+      name: "John Doe Private",
+      role: "learner"
     }
   }));
 
@@ -36,7 +37,8 @@ beforeAll(async () => {
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: v4().slice(0, 10),
-    name: 'John Doe Public'
+    name: 'John Doe Public',
+    role: "learner"
   });
 });
 
@@ -47,7 +49,8 @@ describe('authController.register', () => {
         email: activeUser.email,
         password: v4(),
         username: `${activeUser.username}1`,
-        name: 'John Doe'
+        name: 'John Doe',
+        role: "learner"
       }
     });
     const mockedResponse = mockResponse();
@@ -67,7 +70,8 @@ describe('authController.register', () => {
       email: `${v4()}@gmail.com`,
       password: 'Secret123%%',
       username: v4().slice(0, 12),
-      name: "John Doe"
+      name: "John Doe",
+      role: "learner"
     };
     const mockedRequest = mockRequest<RegisterUser['payload']>({
       body: registerUserPayload

@@ -14,7 +14,7 @@ function createMockUser(
     email: 'john.doe@gmail.com',
     username: 'john_doe',
     name: 'John Doe',
-    role: 'user',
+    role: 'learner',
     createdAt: new Date(),
     updatedAt: new Date(),
     avatar: 'https://www.patterns.dev/img/reactjs/react-logo@3x.svg',
