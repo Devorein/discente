@@ -65,6 +65,9 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
   submitButtonText: 'Sign up',
   onLoadButtonText: 'Signing up...',
   formHeaderText: 'Create an account',
+  helperText: {
+    password: 'Must contain uppercase, lowercase, digits and symbols'
+  },
   formHeaderHelperText:
     'Welcome to Discente, please register your account to start using the app'
 };

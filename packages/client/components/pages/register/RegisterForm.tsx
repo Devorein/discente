@@ -136,7 +136,7 @@ export default function RegisterForm({
                   label={apiConstants.registerUser.label.password}
                   disabled={isSubmitting}
                   placeholder={apiConstants.registerUser.placeholder.password}
-                  helperText='Must contain uppercase, lowercase, digits and symbols'
+                  helperText={apiConstants.registerUser.helperText?.password}
                   name='password'
                 />
               </Stack>
