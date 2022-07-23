@@ -30,7 +30,8 @@ type FormConstants<Payload extends Record<string, any>> = {
   submitButtonText: string
   onLoadButtonText: string
   formHeaderText: string
-  formHeaderHelperText: string;
+  formHeaderHelperText?: string;
+  helperText?: Partial<Record<keyof Payload, string>>;
 }
 
 const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstants<RegisterUser['payload']> = {
@@ -64,6 +65,9 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
   submitButtonText: 'Sign up',
   onLoadButtonText: 'Signing up...',
   formHeaderText: 'Create an account',
+  helperText: {
+    password: 'Must contain uppercase, lowercase, digits and symbols'
+  },
   formHeaderHelperText:
     'Welcome to Discente, please register your account to start using the app'
 };
@@ -103,22 +107,6 @@ const logoutUserConstants: ApiConstants = {
   successMessage: 'Successfully logged out!'
 };
 
-const changeUserPasswordConstants: ApiConstants<
-  ChangeUserPassword['payload'] & {
-    confirmNewPassword: string;
-  }
-> = {
-  payloadFactory: () => ({
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
-  }),
-  endpoint: 'auth/change-password',
-  key: () => ['change-password'],
-  successMessage: 'Successfully Changed Password!',
-  validationSchema: changeUserPasswordClientPayloadSchema()
-};
-
 const deleteUserConstants: ApiConstants = {
   endpoint: 'user',
   key: () => ['delete-user'],
@@ -152,6 +140,47 @@ const updateUserConstants: UpdateUserConstants = {
   formHeaderHelperText: 'Update your information',
   onLoadButtonText: 'Updating User',
   submitButtonText: 'Confirm'
+};
+
+interface ChangeUserPasswordConstants
+  extends ApiConstants<
+    ChangeUserPassword['payload'] & {
+      confirmNewPassword: string;
+    }
+  >,
+  FormConstants<
+    ChangeUserPassword['payload'] & {
+      confirmNewPassword: string;
+    }
+  > { }
+
+const changeUserPasswordConstants: ChangeUserPasswordConstants = {
+  payloadFactory: () => ({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
+  }),
+  endpoint: 'auth/change-password',
+  key: () => ['change-password'],
+  successMessage: 'Successfully changed Password!',
+  validationSchema: changeUserPasswordClientPayloadSchema(),
+  formHeaderText: 'Change password',
+  submitButtonText: 'Change',
+  label: {
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmNewPassword: 'Confirm password'
+  },
+  placeholder: {
+    currentPassword: '********',
+    newPassword: '********',
+    confirmNewPassword: '********'
+  },
+  helperText: {
+    newPassword: registerUserConstants.helperText?.password,
+    confirmNewPassword: 'Must be same as new password'
+  },
+  onLoadButtonText: 'Changing'
 };
 
 export const apiConstants = {

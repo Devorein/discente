@@ -99,9 +99,8 @@ export function changeUserPasswordClientPayloadSchema() {
       newPassword: yup
         .string()
         .required('New Password is required!')
-        .when('currentPassword', (currentPassword, schema) =>
-          schema.notOneOf([currentPassword], 'Passwords should not be the same')
-        ),
+        .min(8, 'Must be more than 8 characters')
+        .matches(PASSWORD_REGEX, 'Weak Password'),
       confirmNewPassword: yup
         .string()
         .required('Confirm New Password is required!')
