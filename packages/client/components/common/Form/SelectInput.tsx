@@ -1,8 +1,9 @@
 import { FormControl, MenuItem, Select, SelectProps } from '@mui/material';
 import { useField } from 'formik';
+import FieldHelperText from './FieldHelperText';
 import FieldLabel from './FieldLabel';
 
-export type SelectInputProps<T> = SelectProps<T> & {
+export type SelectInputProps<T = string> = SelectProps<T> & {
   helperText?: string;
   name: string;
   label?: string;
@@ -52,7 +53,7 @@ export default function SelectInput<T extends string>({
           )
         )}
       </Select>
-      {helperText || null}
+      {helperText && <FieldHelperText helperText={helperText} />}
     </FormControl>
   );
 }

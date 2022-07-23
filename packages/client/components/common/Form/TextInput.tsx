@@ -59,7 +59,7 @@ export default function TextInput({
         {...field}
         {...props}
       />
-      <FieldHelperText helperText={helperText} />
+      {helperText && <FieldHelperText helperText={helperText} />}
     </FormControl>
   );
 }
