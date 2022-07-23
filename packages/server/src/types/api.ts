@@ -35,7 +35,7 @@ export interface ApiRequest<
 // API PAYLOAD AND RESPONSE TYPES
 type RegisterUserPayload = Pick<
   Prisma.UserCreateInput,
-  'name' | 'username' | 'email'
+  'name' | 'username' | 'email' | 'role'
 > & { password: string };
 export type RegisterUser = ApiRequest<RegisterUserPayload, UserWithoutSecretFields>;
 

@@ -18,6 +18,7 @@ export async function registerUser(
         hashedPass: hashedPassword,
         email: payload.email,
         username: payload.username,
+        role: payload.role
       }
     });
     return user as User;
@@ -153,7 +154,8 @@ export async function createUserUnlessExists(
         email: googleUser.email!,
         username: googleUser.username || v4(),
         name: googleUser.name ?? v4(),
-        avatar: googleUser.avatar
+        avatar: googleUser.avatar,
+        role: "learner"
       },
       update: {},
       where: {

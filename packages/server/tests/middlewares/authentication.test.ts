@@ -18,7 +18,8 @@ beforeAll(async () => {
       email: `${v4()}@gmail.com`,
       hashedPass: await hashPassword(userPassword),
       username: v4().slice(0, 10),
-      name: 'John Doe'
+      name: 'John Doe',
+      role: "learner"
     },
   });
 });

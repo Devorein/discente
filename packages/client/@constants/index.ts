@@ -40,7 +40,8 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
       username: '',
       name: '',
       email: '',
-      password: ''
+      password: '',
+      role: 'learner'
     };
   },
   successMessage: 'Successfully registered!',
@@ -50,13 +51,15 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
     email: 'Email',
     name: 'Full name',
     password: 'Password',
-    username: 'Username'
+    username: 'Username',
+    role: 'Join as'
   },
   placeholder: {
     email: 'john.doe@gmail.com',
     name: 'John Doe',
     password: '********',
-    username: 'john_doe'
+    username: 'john_doe',
+    role: ''
   },
   submitButtonText: 'Sign up',
   onLoadButtonText: 'Signing up...',

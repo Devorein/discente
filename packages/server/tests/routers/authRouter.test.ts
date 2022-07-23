@@ -19,7 +19,8 @@ beforeAll(async () => {
     email: `${v4()}@gmail.com`,
     password: userPassword,
     username: v4().slice(0, 10),
-    name: 'John Doe'
+    name: 'John Doe',
+    role: "learner"
   })
   userToken = getUserToken(user)
 })
@@ -44,7 +45,8 @@ describe('POST /auth/register', () => {
         email: `${v4()}@gmail.com`,
         password: await hashPassword(userPassword),
         username: v4().slice(0, 10),
-        name: 'John Doe'
+        name: 'John Doe',
+        role: "learner"
       }
     })
   })

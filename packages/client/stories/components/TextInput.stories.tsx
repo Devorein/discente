@@ -1,7 +1,9 @@
 import { Meta, Story } from '@storybook/react';
 import { Formik } from 'formik';
 
-import TextInput, { TextInputProps } from '../../components/common/TextInput';
+import TextInput, {
+  TextInputProps
+} from '../../components/common/Form/TextInput';
 
 export default {
   title: 'Components/Text Input',

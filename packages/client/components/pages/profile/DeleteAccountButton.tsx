@@ -1,6 +1,6 @@
 import { Button, FormControl, TextField } from '@mui/material';
 import { useDeleteUserMutation, useDeleteUserMutationCache } from 'api';
-import { ConfirmDialog, FormLabelWithHelper } from 'components';
+import { ConfirmDialog, FieldLabel } from 'components';
 import { useCurrentUser } from 'contexts';
 import { useState } from 'react';
 
@@ -54,7 +54,7 @@ export function DeleteAccountButton() {
             mb: 2
           }}
         >
-          <FormLabelWithHelper
+          <FieldLabel
             error={isError ? 'Type your username' : undefined}
             name='currentUsername'
             label='Username'

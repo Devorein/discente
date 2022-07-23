@@ -2,12 +2,13 @@ import { apiConstants } from '@constants';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
-import { RegisterUser } from '@types';
+import { RegisterUser, UserRole } from '@types';
 import { useRegisterUserMutation, useRegisterUserMutationCache } from 'api';
 import {
   CenteredText,
   Logo,
   PasswordInput,
+  SelectInput,
   StyledLink,
   TextInput
 } from 'components';
@@ -82,14 +83,41 @@ export default function RegisterForm({
                 />
               </Box>
               <Stack gap={2} mb={2}>
-                <TextInput
-                  autoFocus
-                  label={apiConstants.registerUser.label.name}
-                  disabled={isSubmitting}
-                  placeholder={apiConstants.registerUser.placeholder.name}
-                  name='name'
-                  required
-                />
+                <Stack
+                  justifyContent='space-between'
+                  flexDirection='row'
+                  gap={1}
+                >
+                  <TextInput
+                    formControlProps={{
+                      sx: {
+                        flexGrow: 1
+                      }
+                    }}
+                    autoFocus
+                    label={apiConstants.registerUser.label.name}
+                    disabled={isSubmitting}
+                    placeholder={apiConstants.registerUser.placeholder.name}
+                    name='name'
+                    required
+                  />
+                  <SelectInput<UserRole>
+                    name='role'
+                    label={apiConstants.registerUser.label.role}
+                    values={['teacher', 'learner']}
+                    defaultValue='learner'
+                    renderValue={(value) => {
+                      return (
+                        <Typography>
+                          {value[0].toUpperCase() + value.slice(1)}
+                        </Typography>
+                      );
+                    }}
+                    sx={{
+                      minWidth: 150
+                    }}
+                  />
+                </Stack>
                 <TextInput
                   required
                   label={apiConstants.registerUser.label.username}
