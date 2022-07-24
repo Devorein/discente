@@ -1,7 +1,5 @@
-import { Prisma, User } from '@prisma/client';
-import {
-  UserWithoutSecretFields
-} from './data';
+import { Course, Prisma, User } from '@prisma/client';
+import { UserWithoutSecretFields } from './data';
 
 export interface ErrorApiResponse {
   status: 'error';
@@ -37,7 +35,10 @@ type RegisterUserPayload = Pick<
   Prisma.UserCreateInput,
   'name' | 'username' | 'email' | 'role'
 > & { password: string };
-export type RegisterUser = ApiRequest<RegisterUserPayload, UserWithoutSecretFields>;
+export type RegisterUser = ApiRequest<
+  RegisterUserPayload,
+  UserWithoutSecretFields
+>;
 
 type LoginUserPayload = {
   password: string;
@@ -65,5 +66,11 @@ export type LogoutUser = ApiRequest<LogoutUserPayload>;
 export type DeleteUser = ApiRequest;
 
 type UpdateUserPayload = Pick<User, 'username' | 'email'> &
-  Partial<Pick<User, 'name' | 'status'>>
+  Partial<Pick<User, 'name' | 'status'>>;
 export type UpdateUser = ApiRequest<UpdateUserPayload, UserWithoutSecretFields>;
+
+type CreateCoursePayload = Pick<
+  Course,
+  'description' | 'image' | 'price' | 'status' | 'tags' | 'title'
+>;
+export type CreateCourse = ApiRequest<CreateCoursePayload, Course>;
