@@ -1,12 +1,14 @@
 // eslint-disable-next-line
 import {
   changeUserPasswordClientPayloadSchema,
+  createCoursePayloadSchema,
   loginUserPayloadSchema,
   registerUserPayloadSchema,
   updateUserPayloadSchema
 } from '@discente/shared';
 import {
   ChangeUserPassword,
+  CreateCourse,
   LoginUser,
   RegisterUser,
   UpdateUser
@@ -19,7 +21,6 @@ export const API_VERSION = 'v1';
 
 interface ApiConstantsPartial {
   successMessage?: string;
-  errorMessage?: string;
   endpoint: string;
   key: (...args: any) => string[];
 }
@@ -201,6 +202,23 @@ const changeUserPasswordConstants: ChangeUserPasswordConstants = {
   onLoadButtonText: 'Changing'
 };
 
+type CreateCourseConstants = ApiConstants<CreateCourse['payload']>;
+
+const createCourseConstants: CreateCourseConstants = {
+  endpoint: '/course',
+  key: () => ['create-course'],
+  payloadFactory: () => ({
+    description: '',
+    image: '',
+    price: 10,
+    status: 'public',
+    tags: [],
+    title: ''
+  }),
+  validationSchema: createCoursePayloadSchema(),
+  successMessage: 'Successfully created course'
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
@@ -208,7 +226,8 @@ export const apiConstants = {
   logoutUser: logoutUserConstants,
   loginUser: loginUserConstants,
   deleteUser: deleteUserConstants,
-  changeUserPassword: changeUserPasswordConstants
+  changeUserPassword: changeUserPasswordConstants,
+  createCourse: createCourseConstants
 };
 
 export const siteMetadata = {
