@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CameraIcon from '@mui/icons-material/Camera';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import { useCurrentUser } from 'contexts';
@@ -15,6 +16,7 @@ export default function NavbarDropdown() {
       (prevChar, currChar) => prevChar + currChar.charAt(0).toUpperCase(),
       ''
     );
+  const { role } = currentUser;
 
   const dropdownButton = (
     <Button
@@ -69,6 +71,11 @@ export default function NavbarDropdown() {
           </StyledLink>
         ]}
       />
+      {role === 'teacher' && (
+        <Button variant='contained' startIcon={<CameraIcon fontSize='small' />}>
+          Create Course
+        </Button>
+      )}
       <LogoutButton />
     </Box>
   );
