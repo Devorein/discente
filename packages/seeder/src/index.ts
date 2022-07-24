@@ -11,9 +11,11 @@ const MILLISECONDS_IN_YEAR = 365 * 24 * 60 * 60 * 1000;
 const MILLISECONDS_IN_MONTH = 30 * 24 * 60 * 60 * 1000;
 
 type UserCreateData = {
-  user: Prisma.UserCreateArgs['data'];
+  user: Required<Prisma.UserCreateManyInput>;
   password: string;
 };
+
+type CourseCreateData = Prisma.CourseCreateManyInput;
 
 export async function generateUserCreateData(): Promise<UserCreateData> {
   const currentDate = new Date();
@@ -49,13 +51,56 @@ export async function generateUserCreateData(): Promise<UserCreateData> {
       hashedPass: await hashPassword(password),
       createdAt,
       updatedAt,
-      role: faker.datatype.boolean() ? 'learner' : 'teacher'
+      role: faker.datatype.boolean() ? 'learner' : 'teacher',
+      tokenVersion: 0,
+      avatar: faker.datatype.boolean() ? faker.internet.avatar() : null,
+      status: faker.helpers.arrayElement(['public', 'private'])
     },
     password
   };
 }
 
-const TOTAL_USERS = 500;
+export function generateCourseCreateData(
+  author: UserCreateData
+): CourseCreateData {
+  const createdAt = faker.date.between(
+    new Date(author.user.createdAt).getTime() + MILLISECONDS_IN_MONTH,
+    new Date(author.user.createdAt).getTime() + MILLISECONDS_IN_YEAR
+  );
+  const updatedAt = faker.date.between(
+    new Date(createdAt).getTime() + MILLISECONDS_IN_MONTH,
+    new Date(createdAt).getTime() + MILLISECONDS_IN_YEAR
+  );
+  return {
+    description: faker.lorem.paragraph(
+      faker.datatype.number({
+        min: 1,
+        max: 5
+      })
+    ),
+    image: faker.internet.avatar(),
+    price: faker.datatype.boolean()
+      ? 0
+      : faker.helpers.arrayElement([5, 10, 15, 25, 50]),
+    title: faker.lorem.lines(1),
+    createdBy: author.user.id,
+    createdAt,
+    updatedAt,
+    status: faker.datatype.boolean() ? 'private' : 'public',
+    tags: new Array(
+      faker.datatype.number({
+        min: 1,
+        max: 5
+      })
+    )
+      .fill('')
+      .map(() => faker.lorem.word())
+  };
+}
+
+const TOTAL_USERS = 50;
+const MIN_COURSE_PER_USER = 1;
+const MAX_COURSE_PER_USER = 5;
 
 async function main() {
   const usersCreateData: UserCreateData[] = [];
@@ -68,14 +113,37 @@ async function main() {
     data: usersCreateData.map((userCreateData) => userCreateData.user)
   });
 
+  const teachers = usersCreateData.filter(
+    (userCreateData) => userCreateData.user.role === 'teacher'
+  );
+
+  const coursesCreateData: CourseCreateData[] = [];
+
+  teachers.forEach((teacher) => {
+    const courseCount = faker.datatype.number({
+      max: MAX_COURSE_PER_USER,
+      min: MIN_COURSE_PER_USER
+    });
+    for (let index = 0; index < courseCount; index += 1) {
+      coursesCreateData.push(generateCourseCreateData(teacher));
+    }
+  });
+
+  await prisma.course.createMany({
+    data: coursesCreateData
+  });
+
   console.log(colors.green(`Created ${TOTAL_USERS} users`));
+  console.log(colors.green(`Created ${coursesCreateData.length} courses`));
+
   fs.writeFileSync(
     path.join(__dirname, 'users.json'),
     JSON.stringify(
       usersCreateData.map((userCreateData) => ({
         username: userCreateData.user.username,
         email: userCreateData.user.email,
-        password: userCreateData.password
+        password: userCreateData.password,
+        role: userCreateData.user.role
       }))
     )
   );
