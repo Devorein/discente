@@ -26,14 +26,17 @@ export default class ApiError extends Error {
 }
 
 export class UniqueConstraintViolationError extends ApiError {
-  static statusCode: number = 400
+  static statusCode: number = 400;
 
   static messageConstructor(entity: string, field: string) {
-    return `A ${entity} with that ${field} already exists`
+    return `A ${entity} with that ${field} already exists`;
   }
 
   constructor(entity: string, field: string) {
-    super(UniqueConstraintViolationError.messageConstructor(entity, field), UniqueConstraintViolationError.statusCode)
+    super(
+      UniqueConstraintViolationError.messageConstructor(entity, field),
+      UniqueConstraintViolationError.statusCode
+    );
   }
 }
 
@@ -41,51 +44,64 @@ export class NotFoundError extends ApiError {
   static statusCode: number = 404;
 
   static messageConstructor(entity: string) {
-    return `Couldn't find ${entity}`
+    return `Couldn't find ${entity}`;
   }
 
   constructor(entity: string) {
-    super(NotFoundError.messageConstructor(entity), NotFoundError.statusCode)
+    super(NotFoundError.messageConstructor(entity), NotFoundError.statusCode);
   }
 }
 
 export class UserNotFoundError extends NotFoundError {
-  static message: string = NotFoundError.messageConstructor('user')
+  static message: string = NotFoundError.messageConstructor('user');
 
   constructor() {
-    super('user')
+    super('user');
   }
 }
 
 export class IncorrectPasswordError extends ApiError {
-  static message: string = 'Incorrect password'
+  static message: string = 'Incorrect password';
 
-  static statusCode: number = 401
+  static statusCode: number = 401;
 
   constructor() {
-    super(IncorrectPasswordError.message, IncorrectPasswordError.statusCode)
+    super(IncorrectPasswordError.message, IncorrectPasswordError.statusCode);
   }
 }
 
 export class NotAuthenticatedError extends ApiError {
-  static message: string = 'Not authenticated'
+  static message: string = 'Not authenticated';
 
-  static statusCode: number = 401
+  static statusCode: number = 401;
 
   constructor() {
-    super(NotAuthenticatedError.message, NotAuthenticatedError.statusCode)
+    super(NotAuthenticatedError.message, NotAuthenticatedError.statusCode);
+  }
+}
+
+export class NotAuthorizedError extends ApiError {
+  static message: string = 'Not authorized';
+
+  static statusCode: number = 403;
+
+  constructor() {
+    super(NotAuthorizedError.message, NotAuthorizedError.statusCode);
   }
 }
 
 export class UpdateFailedError extends ApiError {
-  static statusCode: number = 400
+  static statusCode: number = 400;
 
   static messageConstructor(entity: string) {
-    return `Failed to update ${entity}`
+    return `Failed to update ${entity}`;
   }
 
   constructor(entity: string) {
-    super(UpdateFailedError.messageConstructor(entity), UpdateFailedError.statusCode)
+    super(
+      UpdateFailedError.messageConstructor(entity),
+      UpdateFailedError.statusCode
+    );
   }
 }
 

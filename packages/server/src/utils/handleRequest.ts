@@ -17,10 +17,10 @@ function handleError(
   message: string = 'Something went wrong, please try again!'
 ) {
   if (err instanceof ApiError) return err.handleResponse(res);
-  res.status(statusCode)
+  res.status(statusCode);
   res.json({
     status: 'error',
-    error: err?.message || message
+    error: message
   });
   return Logger.error(err);
 }
@@ -36,7 +36,7 @@ function handleSuccess<SuccessData>(
   data: SuccessData,
   statusCode?: number
 ) {
-  res.status(statusCode || 200)
+  res.status(statusCode || 200);
   res.json({
     status: 'success',
     data

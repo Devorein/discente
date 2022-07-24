@@ -1,6 +1,18 @@
 // eslint-disable-next-line
-import { changeUserPasswordClientPayloadSchema, loginUserPayloadSchema, registerUserPayloadSchema, updateUserPayloadSchema } from '@discente/shared';
-import { ChangeUserPassword, LoginUser, RegisterUser, UpdateUser } from '@types';
+import {
+  changeUserPasswordClientPayloadSchema,
+  createCoursePayloadSchema,
+  loginUserPayloadSchema,
+  registerUserPayloadSchema,
+  updateUserPayloadSchema
+} from '@discente/shared';
+import {
+  ChangeUserPassword,
+  CreateCourse,
+  LoginUser,
+  RegisterUser,
+  UpdateUser
+} from '@types';
 import { BaseSchema } from 'yup';
 
 export const SERVER_URL =
@@ -8,16 +20,17 @@ export const SERVER_URL =
 export const API_VERSION = 'v1';
 
 interface ApiConstantsPartial {
-  successMessage?: string
-  errorMessage?: string
-  endpoint: string
-  key: ((...args: any) => string[])
+  successMessage?: string;
+  endpoint: string;
+  key: (...args: any) => string[];
 }
 
-type ApiConstants<Payload = undefined> = (Payload extends undefined ? ApiConstantsPartial : (ApiConstantsPartial & {
-  payloadFactory: () => Payload,
-  validationSchema: BaseSchema,
-}))
+type ApiConstants<Payload = undefined> = Payload extends undefined
+  ? ApiConstantsPartial
+  : ApiConstantsPartial & {
+      payloadFactory: () => Payload;
+      validationSchema: BaseSchema;
+    };
 
 const getCurrentUserConstants: ApiConstants = {
   endpoint: 'auth/me',
@@ -25,16 +38,19 @@ const getCurrentUserConstants: ApiConstants = {
 };
 
 type FormConstants<Payload extends Record<string, any>> = {
-  label: Record<keyof Payload, string>
-  placeholder: Record<keyof Payload, string>
-  submitButtonText: string
-  onLoadButtonText: string
-  formHeaderText: string
+  label: Record<keyof Payload, string>;
+  placeholder: Record<keyof Payload, string>;
+  submitButtonText: string;
+  onLoadButtonText: string;
+  formHeaderText: string;
   formHeaderHelperText?: string;
   helperText?: Partial<Record<keyof Payload, string>>;
-}
+};
 
-const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstants<RegisterUser['payload']> = {
+type RegisterUSerConstants = ApiConstants<RegisterUser['payload']> &
+  FormConstants<RegisterUser['payload']>;
+
+const registerUserConstants: RegisterUSerConstants = {
   endpoint: 'auth/register',
   payloadFactory: () => {
     return {
@@ -72,7 +88,10 @@ const registerUserConstants: ApiConstants<RegisterUser['payload']> & FormConstan
     'Welcome to Discente, please register your account to start using the app'
 };
 
-const loginUserConstants: ApiConstants<LoginUser['payload']> & FormConstants<LoginUser['payload']> = {
+type LoginUserConstants = ApiConstants<LoginUser['payload']> &
+  FormConstants<LoginUser['payload']>;
+
+const loginUserConstants: LoginUserConstants = {
   endpoint: 'auth/login',
   payloadFactory: () => {
     return {
@@ -144,15 +163,15 @@ const updateUserConstants: UpdateUserConstants = {
 
 interface ChangeUserPasswordConstants
   extends ApiConstants<
-    ChangeUserPassword['payload'] & {
-      confirmNewPassword: string;
-    }
-  >,
-  FormConstants<
-    ChangeUserPassword['payload'] & {
-      confirmNewPassword: string;
-    }
-  > { }
+      ChangeUserPassword['payload'] & {
+        confirmNewPassword: string;
+      }
+    >,
+    FormConstants<
+      ChangeUserPassword['payload'] & {
+        confirmNewPassword: string;
+      }
+    > {}
 
 const changeUserPasswordConstants: ChangeUserPasswordConstants = {
   payloadFactory: () => ({
@@ -183,6 +202,48 @@ const changeUserPasswordConstants: ChangeUserPasswordConstants = {
   onLoadButtonText: 'Changing'
 };
 
+type CreateCourseConstants = ApiConstants<CreateCourse['payload']> &
+  FormConstants<CreateCourse['payload']>;
+
+const createCourseConstants: CreateCourseConstants = {
+  endpoint: '/course',
+  key: () => ['create-course'],
+  payloadFactory: () => ({
+    description: '',
+    image: '',
+    price: 10,
+    status: 'public',
+    tags: [],
+    title: ''
+  }),
+  validationSchema: createCoursePayloadSchema(),
+  successMessage: 'Successfully created course',
+  formHeaderText: 'Create a course',
+  label: {
+    description: 'Description',
+    image: 'Image',
+    price: 'Price',
+    status: 'Status',
+    tags: 'Tags',
+    title: 'Title'
+  },
+  onLoadButtonText: 'Creating ...',
+  placeholder: {
+    description: 'This awesome course is all about ...',
+    image: 'https://course/assets/256.png',
+    price: '15',
+    status: '',
+    tags: 'finance, fitness, k8s',
+    title: 'My awesome course'
+  },
+  submitButtonText: 'Create',
+  formHeaderHelperText:
+    'Take the first step and create a course to share the joy of learning',
+  helperText: {
+    tags: 'A collection of tags to aid in course discovery'
+  }
+};
+
 export const apiConstants = {
   getCurrentUser: getCurrentUserConstants,
   registerUser: registerUserConstants,
@@ -190,7 +251,8 @@ export const apiConstants = {
   logoutUser: logoutUserConstants,
   loginUser: loginUserConstants,
   deleteUser: deleteUserConstants,
-  changeUserPassword: changeUserPasswordConstants
+  changeUserPassword: changeUserPasswordConstants,
+  createCourse: createCourseConstants
 };
 
 export const siteMetadata = {

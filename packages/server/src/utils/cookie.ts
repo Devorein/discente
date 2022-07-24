@@ -1,8 +1,8 @@
-import { User } from "@prisma/client";
-import { CookieOptions, Response } from "express";
-import { CLIENT_URL, COOKIE_NAME, NODE_ENV } from "../config";
-import { UserJWTPayload } from "../types";
-import { signToken } from "./token";
+import { User } from '@prisma/client';
+import { CookieOptions, Response } from 'express';
+import { CLIENT_URL, COOKIE_NAME, NODE_ENV } from '../config';
+import { UserJWTPayload } from '../types';
+import { signToken } from './token';
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
@@ -21,7 +21,7 @@ export const addCookieToResponse = (
   res: Response,
   user: User,
   remember?: boolean,
-  accessTokens?: { google: string },
+  accessTokens?: { google: string }
 ) => {
   const { id, username, email, role, tokenVersion } = user;
   const token = signToken<UserJWTPayload>({

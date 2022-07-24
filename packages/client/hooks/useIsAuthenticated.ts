@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 export const protectedRoutes = [
   '/profile/change-password',
   '/profile/update-user',
-  '/profile'
+  '/profile',
+  '/create-course'
 ];
 
 export function useIsAuthenticated() {

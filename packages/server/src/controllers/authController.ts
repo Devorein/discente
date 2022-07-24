@@ -2,9 +2,29 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { CLIENT_URL } from '../config';
 import * as googleOAuth from '../libs/oauth/google';
-import { changePasswordById, createUserUnlessExists, incrementTokenVersionById, loginUser, registerUser } from '../models';
-import { ApiResponse, ChangeUserPassword, GetCurrentUser, LoginUser, LogoutUser, RegisterUser } from '../types';
-import { addCookieToResponse, handleError, handleSuccess, removeCookieFromResponse, removeSecretUserFields, verifyPassword } from '../utils';
+import {
+  changePasswordById,
+  createUserUnlessExists,
+  incrementTokenVersionById,
+  loginUser,
+  registerUser
+} from '../models';
+import {
+  ApiResponse,
+  ChangeUserPassword,
+  GetCurrentUser,
+  LoginUser,
+  LogoutUser,
+  RegisterUser
+} from '../types';
+import {
+  addCookieToResponse,
+  handleError,
+  handleSuccess,
+  removeCookieFromResponse,
+  removeSecretUserFields,
+  verifyPassword
+} from '../utils';
 
 const authController = {
   register: async (
@@ -63,14 +83,9 @@ const authController = {
     }
   },
 
-  me: async (
-    req: Request,
-    res: Response<GetCurrentUser['response']>
-  ) => {
+  me: async (req: Request, res: Response<GetCurrentUser['response']>) => {
     try {
-      const loggedInUser = removeSecretUserFields(
-        req.user!
-      );
+      const loggedInUser = removeSecretUserFields(req.user!);
       return handleSuccess<GetCurrentUser['data']>(res, loggedInUser);
     } catch (err) {
       return handleError(res, err);
@@ -109,6 +124,6 @@ const authController = {
       res.redirect(CLIENT_URL);
     }
   }
-}
+};
 
 export default authController;

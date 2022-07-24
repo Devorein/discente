@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
-import { sign } from "jsonwebtoken";
-import { JWT_ALGORITHM, JWT_SECRET } from "../config";
-import { UserJWTPayload } from "../types";
+import { User } from '@prisma/client';
+import { sign } from 'jsonwebtoken';
+import { JWT_ALGORITHM, JWT_SECRET } from '../config';
+import { UserJWTPayload } from '../types';
 
 /**
  * Signs token based on given payload

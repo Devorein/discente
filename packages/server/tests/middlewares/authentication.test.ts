@@ -1,9 +1,7 @@
 import { User } from '@prisma/client';
 import { v4 } from 'uuid';
 import { prisma } from '../../src/config';
-import {
-  isAuthenticated
-} from '../../src/middlewares/authentication';
+import { isAuthenticated } from '../../src/middlewares';
 import { hashPassword, signToken } from '../../src/utils';
 import { mockRequest, mockResponse } from '../helpers/mocks';
 
@@ -19,8 +17,8 @@ beforeAll(async () => {
       hashedPass: await hashPassword(userPassword),
       username: v4().slice(0, 10),
       name: 'John Doe',
-      role: "learner"
-    },
+      role: 'learner'
+    }
   });
 });
 
@@ -29,7 +27,7 @@ describe('isAuthenticated', () => {
     const mockedRequest = mockRequest();
     const mockedResponse = mockResponse();
 
-    await isAuthenticated(mockedRequest, mockedResponse, () => { });
+    await isAuthenticated(mockedRequest, mockedResponse, () => {});
     expect(mockedResponse.status).toHaveBeenCalledWith(401);
     expect(mockedResponse.json).toHaveBeenCalledWith({
       status: 'error',
@@ -44,7 +42,7 @@ describe('isAuthenticated', () => {
     const mockedRequest = mockRequest({ access_token: token });
     const mockedResponse = mockResponse();
 
-    await isAuthenticated(mockedRequest, mockedResponse, () => { });
+    await isAuthenticated(mockedRequest, mockedResponse, () => {});
     expect(mockedResponse.status).toHaveBeenCalledWith(401);
     expect(mockedResponse.json).toHaveBeenCalledWith({
       status: 'error',
@@ -56,7 +54,7 @@ describe('isAuthenticated', () => {
     const mockedRequest = mockRequest({ access_token: '123' });
     const mockedResponse = mockResponse();
 
-    await isAuthenticated(mockedRequest, mockedResponse, () => { });
+    await isAuthenticated(mockedRequest, mockedResponse, () => {});
     expect(mockedResponse.status).toHaveBeenCalledWith(401);
     expect(mockedResponse.json).toHaveBeenCalledWith({
       status: 'error',
@@ -73,7 +71,7 @@ describe('isAuthenticated', () => {
     });
     const mockedResponse = mockResponse();
 
-    await isAuthenticated(mockedRequest, mockedResponse, () => { });
+    await isAuthenticated(mockedRequest, mockedResponse, () => {});
     expect(mockedResponse.status).toHaveBeenCalledWith(401);
     expect(mockedResponse.json).toHaveBeenCalledWith({
       status: 'error',

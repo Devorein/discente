@@ -1,5 +1,6 @@
 import {
-  changeUserPasswordPayloadSchema, loginUserPayloadSchema,
+  changeUserPasswordPayloadSchema,
+  loginUserPayloadSchema,
   registerUserPayloadSchema
 } from '@discente/shared';
 
@@ -29,6 +30,6 @@ authRouter.put(
 );
 
 authRouter.post('/logout', isAuthenticated, authController.logout);
-authRouter.get('/me', isAuthenticated, authController.me)
+authRouter.get('/me', isAuthenticated, authController.me);
 
 export default authRouter;

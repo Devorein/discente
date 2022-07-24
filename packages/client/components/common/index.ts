@@ -1,3 +1,4 @@
+import Button from './Button';
 import CenteredText from './CenteredText';
 import ConfirmDialog from './ConfirmDialog';
 import Document from './Document';
@@ -10,6 +11,7 @@ import StyledLink from './StyledLink';
 export * from './Form';
 export * from './Navbar';
 export {
+  Button,
   LogoutButton,
   ConfirmDialog,
   OAuthBar,
@@ -19,4 +21,3 @@ export {
   Document,
   Providers
 };
-

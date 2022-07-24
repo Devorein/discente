@@ -1,4 +1,4 @@
-import { updateUserPayloadSchema } from "@discente/shared";
+import { updateUserPayloadSchema } from '@discente/shared';
 import { Router } from 'express';
 import { userController } from '../controllers';
 import { isAuthenticated, validateData } from '../middlewares';
@@ -12,10 +12,6 @@ userRouter.put(
   userController.update
 );
 
-userRouter.delete(
-  '/',
-  isAuthenticated,
-  userController.delete
-);
+userRouter.delete('/', isAuthenticated, userController.delete);
 
 export default userRouter;

@@ -8,10 +8,12 @@
     "start": "node ./dist/index.js",
     "build": "tsc --sourceMap false --declaration false",
     "build:watch": "tsc -w",
+    "dev": "npm run build && npm run start",
     "lint": "npx eslint -c .eslintrc.js . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "format": "npx prettier \"./src/**/*.(ts|js)\" --write",
-    "lerna-add": "npx lerna add --scope=@discente/seeder"
+    "lerna-add": "npx lerna add --scope=@discente/seeder",
+    "clear-db": "node dist/clearDatabase.js"
   },
   "keywords": [],
   "author": "",
