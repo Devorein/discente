@@ -7,4 +7,4 @@ export type UserJWTPayload = Omit<
   'createdAt' | 'updatedAt' | 'name' | 'hashedPass' | 'avatar' | 'status'
 > & { accessTokens?: { google: string } };
 
-export * from "@prisma/client";
+export * from '@prisma/client';

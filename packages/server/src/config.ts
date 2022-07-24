@@ -16,7 +16,7 @@ export const NODE_ENV = process.env.NODE_ENV as
   | 'test'
   | 'production';
 export const JWT_ALGORITHM = process.env.JWT_ALGORITHM as Algorithm;
-export const COOKIE_NAME = process.env.COOKIE_NAME!
+export const COOKIE_NAME = process.env.COOKIE_NAME!;
 export const ADMIN_USERNAME = process.env.ADMIN_USERNAME!;
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
 export const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID!;

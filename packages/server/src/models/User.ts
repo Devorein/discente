@@ -1,13 +1,16 @@
-import { User } from "@prisma/client";
-import { v4 } from "uuid";
-import ApiError, { DeleteFailedError, UniqueConstraintViolationError, UpdateFailedError, UserNotFoundError } from "../ApiError";
-import { prisma } from "../config";
-import { LoginUser, RegisterUser, UpdateUser } from "../types";
-import { hashPassword, verifyPassword } from "../utils";
+import { User } from '@prisma/client';
+import { v4 } from 'uuid';
+import ApiError, {
+  DeleteFailedError,
+  UniqueConstraintViolationError,
+  UpdateFailedError,
+  UserNotFoundError
+} from '../ApiError';
+import { prisma } from '../config';
+import { LoginUser, RegisterUser, UpdateUser } from '../types';
+import { hashPassword, verifyPassword } from '../utils';
 
-export async function registerUser(
-  payload: RegisterUser['payload']
-) {
+export async function registerUser(payload: RegisterUser['payload']) {
   const hashedPassword = await hashPassword(payload.password);
   try {
     const id = v4();
@@ -32,9 +35,7 @@ export async function registerUser(
   }
 }
 
-export async function loginUser(
-  payload: LoginUser['payload']
-) {
+export async function loginUser(payload: LoginUser['payload']) {
   const { password, usernameOrEmail } = payload;
   const user = await prisma.user.findFirst({
     where: {
@@ -58,7 +59,7 @@ export async function updateUserById(
   data: UpdateUser['payload']
 ): Promise<User> {
   try {
-    const user = (await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id
       },
@@ -66,9 +67,9 @@ export async function updateUserById(
         name: data.name,
         email: data.email,
         username: data.username,
-        status: data.status,
+        status: data.status
       }
-    }));
+    });
     return user;
   } catch (err) {
     if (err.code === 'P2002') {
@@ -104,9 +105,7 @@ export async function changePasswordById(id: string, password: string) {
   }
 }
 
-export async function incrementTokenVersionById(
-  userId: string
-) {
+export async function incrementTokenVersionById(userId: string) {
   try {
     return await prisma.user.update({
       where: {
@@ -143,25 +142,23 @@ export async function deleteUserById(userId: string) {
   }
 }
 
-export async function createUserUnlessExists(
-  googleUser: Partial<User>
-) {
+export async function createUserUnlessExists(googleUser: Partial<User>) {
   try {
     const id = v4();
-    const user = (await prisma.user.upsert({
+    const user = await prisma.user.upsert({
       create: {
         id,
         email: googleUser.email!,
         username: googleUser.username || v4(),
         name: googleUser.name ?? v4(),
         avatar: googleUser.avatar,
-        role: "learner"
+        role: 'learner'
       },
       update: {},
       where: {
         email: googleUser.email
-      },
-    }));
+      }
+    });
     if (user.id === id) {
       return {
         user,
