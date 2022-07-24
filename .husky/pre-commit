@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+if ! (npm run lint) then
+  printf "Lint failed"
+  exit 1
+fi
+
+npx lint-staged --allow-empty
