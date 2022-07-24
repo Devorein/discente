@@ -4,7 +4,7 @@ import {
   PaletteMode,
   Theme as MaterialUITheme
 } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 
 declare module '@emotion/react' {
   export interface Theme extends MaterialUITheme {}
@@ -15,11 +15,18 @@ const spacing = (factor: number) => {
 };
 
 export function createMuiTheme(themeMode: PaletteMode) {
+  const primaryColor = blue[600];
+  const errorMain = red[500];
+  const shortTransitionDuration = 250;
+  const shorterTransitionDuration = 150;
   return createTheme({
     palette: {
       mode: themeMode,
       primary: {
-        main: blue[600]
+        main: primaryColor
+      },
+      error: {
+        main: errorMain
       }
     },
     typography: {
@@ -27,7 +34,8 @@ export function createMuiTheme(themeMode: PaletteMode) {
     },
     transitions: {
       duration: {
-        short: 250
+        shorter: shorterTransitionDuration,
+        short: shortTransitionDuration
       }
     },
     components: {
@@ -116,6 +124,20 @@ export function createMuiTheme(themeMode: PaletteMode) {
       MuiMenu: {
         defaultProps: {
           elevation: 1
+        }
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            borderRadius: spacing(1)
+          },
+          deleteIcon: {
+            transition: `color ${shorterTransitionDuration}ms ease-in-out`,
+            '&:hover': {
+              color: errorMain,
+              transition: `color ${shorterTransitionDuration}ms ease-in-out`
+            }
+          }
         }
       },
       MuiOutlinedInput: {

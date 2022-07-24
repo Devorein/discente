@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { CreateCourse } from '@types';
 import { useCreateCourseMutation } from 'api';
-import { Button, SelectInput, TextInput } from 'components';
+import { Button, SelectInput, TagsInput, TextInput } from 'components';
 import { Form, Formik } from 'formik';
 
 export interface CreateCourseFormProps {
@@ -20,7 +20,11 @@ export default function CreateCourseForm({
       validateOnBlur={false}
       validationSchema={apiConstants.createCourse.validationSchema}
       onSubmit={async (values, { resetForm }) => {
-        await mutateAsync(values);
+        await mutateAsync(values, {
+          onSuccess() {
+            resetForm();
+          }
+        });
       }}
       validateOnMount
       initialValues={initialValues}
@@ -38,7 +42,7 @@ export default function CreateCourseForm({
             <Form
               style={{
                 height: 'fit-content',
-                maxWidth: 500
+                width: 500
               }}
             >
               <Box my={3}>
@@ -118,6 +122,7 @@ export default function CreateCourseForm({
                     }}
                   />
                 </Stack>
+                <TagsInput name='tags' />
               </Stack>
               <Stack flexDirection='row' justifyContent='space-between' mb={3}>
                 {isLoading ? (
