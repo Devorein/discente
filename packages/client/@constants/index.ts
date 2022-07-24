@@ -202,7 +202,8 @@ const changeUserPasswordConstants: ChangeUserPasswordConstants = {
   onLoadButtonText: 'Changing'
 };
 
-type CreateCourseConstants = ApiConstants<CreateCourse['payload']>;
+type CreateCourseConstants = ApiConstants<CreateCourse['payload']> &
+  FormConstants<CreateCourse['payload']>;
 
 const createCourseConstants: CreateCourseConstants = {
   endpoint: '/course',
@@ -216,7 +217,31 @@ const createCourseConstants: CreateCourseConstants = {
     title: ''
   }),
   validationSchema: createCoursePayloadSchema(),
-  successMessage: 'Successfully created course'
+  successMessage: 'Successfully created course',
+  formHeaderText: 'Create a course',
+  label: {
+    description: 'Description',
+    image: 'Image',
+    price: 'Price',
+    status: 'Status',
+    tags: 'Tags',
+    title: 'Title'
+  },
+  onLoadButtonText: 'Creating ...',
+  placeholder: {
+    description: 'This awesome course is all about ...',
+    image: 'https://course/assets/256.png',
+    price: '15',
+    status: '',
+    tags: 'finance, fitness, k8s',
+    title: 'My awesome course'
+  },
+  submitButtonText: 'Create',
+  formHeaderHelperText:
+    'Take the first step and create a course to share the joy of learning',
+  helperText: {
+    tags: 'A collection of tags to aid in course discovery'
+  }
 };
 
 export const apiConstants = {

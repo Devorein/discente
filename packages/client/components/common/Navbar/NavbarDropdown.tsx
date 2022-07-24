@@ -75,7 +75,7 @@ export default function NavbarDropdown() {
       {role === 'teacher' && (
         <Button
           variant='contained'
-          href='/courses'
+          href='/create-course'
           startIcon={<CameraIcon fontSize='small' />}
         >
           Courses

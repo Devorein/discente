@@ -1,4 +1,10 @@
-import { FormControl, MenuItem, Select, SelectProps } from '@mui/material';
+import {
+  FormControl,
+  FormControlProps,
+  MenuItem,
+  Select,
+  SelectProps
+} from '@mui/material';
 import { useField } from 'formik';
 import FieldHelperText from './FieldHelperText';
 import FieldLabel from './FieldLabel';
@@ -14,6 +20,7 @@ export type SelectInputProps<T = string> = SelectProps<T> & {
         value: string;
         label: string;
       }[];
+  formControlProps?: FormControlProps;
 };
 
 export default function SelectInput<T extends string>({
@@ -25,11 +32,12 @@ export default function SelectInput<T extends string>({
   fullWidth = true,
   name,
   values,
+  formControlProps = {},
   ...props
 }: SelectInputProps<T>) {
   const [field, { error }] = useField(name);
   return (
-    <FormControl>
+    <FormControl {...formControlProps}>
       {label && <FieldLabel error={error} label={label} name={field.name} />}
       <Select<T>
         fullWidth={fullWidth}

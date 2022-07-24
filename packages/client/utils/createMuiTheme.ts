@@ -123,6 +123,10 @@ export function createMuiTheme(themeMode: PaletteMode) {
           input: {
             paddingTop: spacing(2),
             paddingBottom: spacing(2)
+          },
+          root: {
+            paddingTop: spacing(0),
+            paddingBottom: spacing(0)
           }
         }
       },

@@ -1,4 +1,5 @@
 export * from './useChangePasswordMutation';
+export * from './useCreateCourseMutation';
 export * from './useDeleteUserMutation';
 export * from './useLoginMutation';
 export * from './useLogoutMutation';
