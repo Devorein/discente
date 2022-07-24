@@ -7,7 +7,7 @@
     "build-storybook": "lerna run build-storybook --scope=@discente/client",
     "dev": "lerna run dev --parallel",
     "test": "lerna run test --parallel --ignore=@discente/seeder",
-    "lint": "lerna run lint --parallel --ignore=@discente/seeder",
+    "lint": "lerna run lint --parallel",
     "lint:fix": "lerna run lint:fix --parallel",
     "start:test": "lerna run start:test --scope=@discente/server",
     "prisma:generate": "lerna run prisma:generate --scope=@discente/server",
