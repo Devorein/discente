@@ -20,7 +20,7 @@ function handleError(
   res.status(statusCode);
   res.json({
     status: 'error',
-    error: err?.message || message
+    error: message
   });
   return Logger.error(err);
 }

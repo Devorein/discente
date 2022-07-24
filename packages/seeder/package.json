@@ -8,6 +8,7 @@
     "start": "node ./dist/index.js",
     "build": "tsc --sourceMap false --declaration false",
     "build:watch": "tsc -w",
+    "dev": "npm run build && npm run start",
     "lint": "npx eslint -c .eslintrc.js . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "format": "npx prettier \"./src/**/*.(ts|js)\" --write",
