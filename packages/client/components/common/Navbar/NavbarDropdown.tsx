@@ -1,7 +1,8 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CameraIcon from '@mui/icons-material/Camera';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, Box, Button, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
+import { Button } from 'components';
 import { useCurrentUser } from 'contexts';
 import Dropdown from '../Dropdown';
 import LogoutButton from '../LogoutButton';
@@ -72,8 +73,12 @@ export default function NavbarDropdown() {
         ]}
       />
       {role === 'teacher' && (
-        <Button variant='contained' startIcon={<CameraIcon fontSize='small' />}>
-          Create Course
+        <Button
+          variant='contained'
+          href='/courses'
+          startIcon={<CameraIcon fontSize='small' />}
+        >
+          Courses
         </Button>
       )}
       <LogoutButton />

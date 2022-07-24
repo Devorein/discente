@@ -7,7 +7,7 @@ import {
 import { blue, grey } from '@mui/material/colors';
 
 declare module '@emotion/react' {
-  export interface Theme extends MaterialUITheme { }
+  export interface Theme extends MaterialUITheme {}
 }
 
 const spacing = (factor: number) => {

@@ -9,8 +9,7 @@ export function getStorageValue<T = any>(key: string, defaultValue: T): T {
     if (typeof saved === 'string') {
       try {
         return JSON.parse(saved);
-      }
-      catch (error) {
+      } catch (error) {
         return defaultValue;
       }
     }
@@ -23,7 +22,9 @@ export function setStorageValue<T = any>(key: string, value: T) {
 }
 
 export function useLocalStorage<T = any>(key: string, defaultValue: T) {
-  const [value, setValue] = useState<T>(() => getStorageValue<T>(key, defaultValue));
+  const [value, setValue] = useState<T>(() =>
+    getStorageValue<T>(key, defaultValue)
+  );
 
   useEffect(() => {
     setValue(getStorageValue<T>(key, defaultValue));
