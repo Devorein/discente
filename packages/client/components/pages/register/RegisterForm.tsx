@@ -104,7 +104,7 @@ export default function RegisterForm({
                   <SelectInput<UserRole>
                     name='role'
                     label={apiConstants.registerUser.label.role}
-                    values={['teacher', 'learner']}
+                    values={['instructor', 'learner']}
                     defaultValue='learner'
                     renderValue={(value) => {
                       return (

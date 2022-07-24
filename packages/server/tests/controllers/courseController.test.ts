@@ -16,7 +16,7 @@ beforeAll(async () => {
     password: userPassword,
     username: v4().slice(0, 10),
     name: 'John Doe',
-    role: 'teacher'
+    role: 'instructor'
   });
 });
 

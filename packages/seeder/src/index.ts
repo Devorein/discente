@@ -51,7 +51,7 @@ export async function generateUserCreateData(): Promise<UserCreateData> {
       hashedPass: await hashPassword(password),
       createdAt,
       updatedAt,
-      role: faker.datatype.boolean() ? 'learner' : 'teacher',
+      role: faker.datatype.boolean() ? 'learner' : 'instructor',
       tokenVersion: 0,
       avatar: faker.datatype.boolean() ? faker.internet.avatar() : null,
       status: faker.helpers.arrayElement(['public', 'private'])
@@ -113,19 +113,19 @@ async function main() {
     data: usersCreateData.map((userCreateData) => userCreateData.user)
   });
 
-  const teachers = usersCreateData.filter(
-    (userCreateData) => userCreateData.user.role === 'teacher'
+  const instructors = usersCreateData.filter(
+    (userCreateData) => userCreateData.user.role === 'instructor'
   );
 
   const coursesCreateData: CourseCreateData[] = [];
 
-  teachers.forEach((teacher) => {
+  instructors.forEach((instructor) => {
     const courseCount = faker.datatype.number({
       max: MAX_COURSE_PER_USER,
       min: MIN_COURSE_PER_USER
     });
     for (let index = 0; index < courseCount; index += 1) {
-      coursesCreateData.push(generateCourseCreateData(teacher));
+      coursesCreateData.push(generateCourseCreateData(instructor));
     }
   });
 

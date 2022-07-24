@@ -72,7 +72,7 @@ export default function NavbarDropdown() {
           </StyledLink>
         ]}
       />
-      {role === 'teacher' && (
+      {role === 'instructor' && (
         <Button
           variant='contained'
           href='/create-course'

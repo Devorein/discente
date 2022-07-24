@@ -20,7 +20,7 @@ export function registerUserPayloadSchema() {
         .required()
         .min(8, 'Must be more than 8 characters')
         .matches(PASSWORD_REGEX, 'Weak Password'),
-      role: yup.string().required().oneOf(['learner', 'teacher'])
+      role: yup.string().required().oneOf(['learner', 'instructor'])
     })
     .strict()
     .noUnknown();

@@ -9,7 +9,7 @@ courseRouter.post(
   '/',
   validateData(createCoursePayloadSchema()),
   isAuthenticated,
-  isAuthorized(['teacher']),
+  isAuthorized(['instructor']),
   courseController.create
 );
 
