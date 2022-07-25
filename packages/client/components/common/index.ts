@@ -13,6 +13,7 @@ export * from './Avatar';
 export * from './Form';
 export * from './Navbar';
 export * from './PaginatedCourses';
+export * from './Pagination';
 export {
   Button,
   ScrollableStack,

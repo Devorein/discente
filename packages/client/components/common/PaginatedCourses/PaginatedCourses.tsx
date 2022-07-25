@@ -15,11 +15,15 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { CourseSortableFields, SortOrder } from '@types';
+import { CourseSortableFields } from '@types';
 import { useGetCreatedCoursesQuery } from 'api';
-import { Button, CustomAvatar, ScrollableStack } from 'components';
+import {
+  Button,
+  PaginationSort,
+  PaginationSortProps,
+  ScrollableStack
+} from 'components';
 import { useState } from 'react';
-import CourseSort from './CourseSort';
 
 interface PaginatedCoursesProps extends PaperProps {}
 
@@ -28,8 +32,12 @@ export default function PaginatedCourses({
   ...props
 }: PaginatedCoursesProps) {
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [sortField, setSortField] = useState<CourseSortableFields>('title');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [sortState, setSortState] = useState<
+    PaginationSortProps<CourseSortableFields>['sort']
+  >({
+    field: 'title',
+    order: 'asc'
+  });
 
   const {
     data: paginatedData,
@@ -42,8 +50,8 @@ export default function PaginatedCourses({
   } = useGetCreatedCoursesQuery({
     cursor: null,
     take: itemsPerPage,
-    sort: sortField,
-    order: sortOrder
+    sort: sortState.field,
+    order: sortState.order
   });
 
   const totalFetchedItems = allItems.length;
@@ -75,16 +83,19 @@ export default function PaginatedCourses({
             display='flex'
             mb={1}
           >
-            <Typography variant='h6'>Users</Typography>
-            <CourseSort
-              onSortFieldChange={async (e) => {
-                setSortField(e.target.value as CourseSortableFields);
-              }}
-              onSortOrderChange={async (e) => {
-                setSortOrder(e.target.value as SortOrder);
-              }}
-              sortOrder={sortOrder}
-              sortField={sortField}
+            <Typography variant='h6'>Courses</Typography>
+            <PaginationSort<CourseSortableFields>
+              onChange={setSortState}
+              sort={sortState}
+              fields={[
+                'title',
+                'price',
+                'ratings',
+                'enrolled',
+                'status',
+                'updatedAt',
+                'createdAt'
+              ]}
             />
             <Typography variant='subtitle1' fontWeight={600}>
               {totalFetchedItems} / {totalItems}
@@ -98,7 +109,6 @@ export default function PaginatedCourses({
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell>Instructor</TableCell>
                   <TableCell>Title</TableCell>
                   <TableCell>Price</TableCell>
                   <TableCell>Status</TableCell>
@@ -116,12 +126,6 @@ export default function PaginatedCourses({
                   }
                   return (
                     <TableRow key={paginatedCourse.id}>
-                      <TableCell>
-                        <CustomAvatar
-                          avatar={paginatedCourse.instructor.avatar}
-                          name={paginatedCourse.instructor.name}
-                        />
-                      </TableCell>
                       <TableCell>
                         <Typography variant='body2'>
                           {paginatedCourse.title}
@@ -173,8 +177,8 @@ export default function PaginatedCourses({
                 pageParam: {
                   cursor: lastFetchedItem?.id,
                   take: itemsPerPage,
-                  sort: sortField,
-                  order: sortOrder
+                  sort: sortState.field,
+                  order: sortState.order
                 }
               });
             }}
