@@ -36,15 +36,16 @@ model User {
 }
 
 model Course {
-  id          String      @id @default(uuid()) @db.Uuid
-  title       String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  createdBy   String      @db.Uuid
-  instructor  User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  description String
-  image       String
-  tags        String[]
-  price       Int
-  status      ModelStatus @default(public)
+  id               String      @id @default(uuid()) @db.Uuid
+  title            String
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  createdBy        String      @db.Uuid
+  instructor       User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  briefDescription String
+  description      String
+  image            String
+  tags             String[]
+  price            Int
+  status           ModelStatus @default(public)
 }

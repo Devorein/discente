@@ -1,22 +1,18 @@
-import { useTheme } from '@emotion/react';
 import {
   Box,
   CircularProgress,
+  Grid,
   MenuItem,
   Paper,
   PaperProps,
   Select,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography
 } from '@mui/material';
 import { CourseSortableFields } from '@types';
 import { useGetCreatedCoursesQuery } from 'api';
 import {
+  CustomAvatar,
   PaginationLoadMoreButton,
   PaginationSort,
   PaginationSortProps,
@@ -54,7 +50,6 @@ export default function PaginatedCourses({
   });
 
   const totalFetchedItems = allItems.length;
-  const theme = useTheme();
 
   if (isPaginatedDataLoading) {
     return <CircularProgress />;
@@ -105,62 +100,47 @@ export default function PaginatedCourses({
               flexGrow: 1
             }}
           >
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Last updated</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {allItems.map((paginatedCourse) => {
-                  let statusColor = theme.palette.text.disabled;
-                  const status = paginatedCourse.status;
-                  if (status === 'public') {
-                    statusColor = theme.palette.success.main;
-                  } else if (status === 'banned') {
-                    statusColor = theme.palette.error.main;
-                  }
-                  return (
-                    <TableRow key={paginatedCourse.id}>
-                      <TableCell>
-                        <Typography variant='body2'>
+            {allItems.map((paginatedCourse) => {
+              return (
+                <Paper
+                  key={paginatedCourse.id}
+                  sx={{
+                    p: 3
+                  }}
+                  elevation={0}
+                >
+                  <Stack flexDirection='row' gap={2}>
+                    <img
+                      src={paginatedCourse.image}
+                      style={{
+                        height: 100,
+                        width: 150,
+                        objectFit: 'fill'
+                      }}
+                    />
+                    <Grid>
+                      <Stack gap={1}>
+                        <Typography variant='h6'>
                           {paginatedCourse.title}
                         </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant='subtitle2'>
-                          {paginatedCourse.price}
+                        <Typography variant='body2'>
+                          {paginatedCourse.description}
                         </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          sx={{
-                            textTransform: 'uppercase',
-                            fontWeight: 600,
-                            color: statusColor
-                          }}
-                          variant='subtitle2'
-                        >
-                          {paginatedCourse.status}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          minWidth: 150
-                        }}
-                      >
-                        <Typography variant='subtitle2'>
-                          {new Date(paginatedCourse.updatedAt).toLocaleString()}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                        <Stack gap={1} alignItems='center' flexDirection='row'>
+                          <CustomAvatar
+                            avatar={paginatedCourse.instructor.avatar}
+                            name={paginatedCourse.instructor.name}
+                          />
+                          <Typography variant='subtitle2'>
+                            {paginatedCourse.instructor.name}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  </Stack>
+                </Paper>
+              );
+            })}
           </ScrollableStack>
         </Stack>
         <Stack

@@ -74,11 +74,17 @@ export function generateCourseCreateData(
   return {
     description: faker.lorem.paragraph(
       faker.datatype.number({
-        min: 1,
-        max: 5
+        min: 10,
+        max: 25
       })
     ),
-    image: faker.internet.avatar(),
+    briefDescription: faker.lorem.paragraph(
+      faker.datatype.number({
+        min: 1,
+        max: 3
+      })
+    ),
+    image: faker.image.abstract(),
     price: faker.datatype.boolean()
       ? 0
       : faker.helpers.arrayElement([5, 10, 15, 25, 50]),
