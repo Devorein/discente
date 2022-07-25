@@ -20,6 +20,45 @@ enum ModelStatus {
   banned
 }
 
+enum CourseLevel {
+  beginner
+  intermediate
+  expert
+  all
+}
+
+enum Language {
+  english
+  french
+  spanish
+  portugese
+  arabic
+  polish
+  german
+  italian
+  bangla
+  korean
+  russian
+  japanese
+  hindi
+}
+
+enum CourseCategory {
+  development
+  business
+  finance_and_accounting
+  it_and_software
+  office_productivity
+  personal_development
+  design
+  marketing
+  lifestyle
+  photography_and_video
+  health_and_fitness
+  music
+  teaching_and_academics
+}
+
 model User {
   id             String      @id @default(uuid()) @db.Uuid
   email          String      @unique
@@ -36,16 +75,20 @@ model User {
 }
 
 model Course {
-  id               String      @id @default(uuid()) @db.Uuid
+  id               String         @id @default(uuid()) @db.Uuid
   title            String
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  createdBy        String      @db.Uuid
-  instructor       User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  createdBy        String         @db.Uuid
+  instructor       User           @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   briefDescription String
   description      String
   image            String
   tags             String[]
   price            Int
-  status           ModelStatus @default(public)
+  status           ModelStatus    @default(public)
+  category         CourseCategory
+  level            CourseLevel
+  language         Language
+  subtitle         Language?
 }
