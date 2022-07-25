@@ -1,6 +1,6 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CameraIcon from '@mui/icons-material/Camera';
 import SettingsIcon from '@mui/icons-material/Settings';
+import VideocamIcon from '@mui/icons-material/Videocam';
 import { Avatar, Box, Typography } from '@mui/material';
 import { Button } from 'components';
 import { useCurrentUser } from 'contexts';
@@ -62,6 +62,16 @@ export default function NavbarDropdown() {
           </StyledLink>,
           <StyledLink
             disableHoverStyle
+            href='/courses'
+            display='flex'
+            gap={1}
+            alignItems='center'
+          >
+            <VideocamIcon fontSize='small' />
+            <Typography variant='body2'>My Courses</Typography>
+          </StyledLink>,
+          <StyledLink
+            disableHoverStyle
             href='/account'
             display='flex'
             gap={1}
@@ -76,9 +86,9 @@ export default function NavbarDropdown() {
         <Button
           variant='contained'
           href='/create-course'
-          startIcon={<CameraIcon fontSize='small' />}
+          startIcon={<VideocamIcon fontSize='small' />}
         >
-          Courses
+          Course
         </Button>
       )}
       <LogoutButton />

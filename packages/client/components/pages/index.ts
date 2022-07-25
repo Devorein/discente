@@ -1,3 +1,4 @@
+export * from './courses';
 export * from './create-course';
 export * from './homepage';
 export * from './login';
