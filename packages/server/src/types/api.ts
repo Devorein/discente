@@ -84,7 +84,13 @@ export type UpdateUser = ApiRequest<UpdateUserPayload, UserWithoutSecretFields>;
 
 type CreateCoursePayload = Pick<
   Course,
-  'description' | 'image' | 'price' | 'status' | 'tags' | 'title'
+  | 'description'
+  | 'image'
+  | 'price'
+  | 'status'
+  | 'tags'
+  | 'title'
+  | 'briefDescription'
 >;
 export type CreateCourse = ApiRequest<CreateCoursePayload, Course>;
 

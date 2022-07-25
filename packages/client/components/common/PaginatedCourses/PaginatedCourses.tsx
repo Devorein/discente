@@ -114,8 +114,7 @@ export default function PaginatedCourses({
                       src={paginatedCourse.image}
                       style={{
                         height: 100,
-                        width: 150,
-                        objectFit: 'fill'
+                        width: 150
                       }}
                     />
                     <Grid>
@@ -124,7 +123,7 @@ export default function PaginatedCourses({
                           {paginatedCourse.title}
                         </Typography>
                         <Typography variant='body2'>
-                          {paginatedCourse.description}
+                          {paginatedCourse.briefDescription}
                         </Typography>
                         <Stack gap={1} alignItems='center' flexDirection='row'>
                           <CustomAvatar

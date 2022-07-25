@@ -6,6 +6,7 @@ export function createCoursePayloadSchema() {
     .shape({
       image: yup.string().required(),
       description: yup.string().required(),
+      briefDescription: yup.string().required(),
       title: yup.string().required(),
       status: yup
         .string()

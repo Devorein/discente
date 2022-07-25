@@ -19,7 +19,8 @@ export async function createCourse(
       title: payload.title,
       createdBy,
       status: payload.status,
-      tags: payload.tags
+      tags: payload.tags,
+      briefDescription: payload.briefDescription
     }
   });
 
@@ -40,7 +41,7 @@ export async function getCreatedCourses(
       id: true,
       createdAt: true,
       createdBy: true,
-      description: true,
+      briefDescription: true,
       image: true,
       price: true,
       tags: true,
