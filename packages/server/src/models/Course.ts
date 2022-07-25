@@ -45,7 +45,7 @@ export async function getCreatedCourses(
       title: true,
       updatedAt: true
     },
-    // TODO: fix for ratings and enrolled
+    // TODO: fix for ratings and enrolled as they are aggregated values
     orderBy: [
       {
         [payload.sort]: payload.order
