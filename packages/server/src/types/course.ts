@@ -1,3 +1,4 @@
+import { CourseSortableFields } from '@discente/shared';
 import { Course } from '@prisma/client';
 import { ApiRequest, Paginated, PaginationPayload } from './api';
 import { CourseWithInstructor } from './data';
@@ -21,14 +22,7 @@ export type CreateCourse = ApiRequest<
 >;
 
 export type PaginatedCourses = Paginated<CourseWithInstructor>;
-export type CourseSortableFields =
-  | 'title'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'price'
-  | 'ratings'
-  | 'enrolled'
-  | 'status';
+
 export type GetPaginatedCourses = ApiRequest<
   PaginationPayload<CourseSortableFields>,
   PaginatedCourses

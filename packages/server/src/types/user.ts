@@ -1,3 +1,4 @@
+import { UserSortableFields } from '@discente/shared';
 import { Prisma, User } from '@prisma/client';
 import { ApiRequest, Paginated, PaginationPayload } from './api';
 import { UserWithoutSecretFields } from './data';
@@ -18,12 +19,6 @@ export type LoginUser = ApiRequest<
   UserWithoutSecretFields
 >;
 
-export type UserSortableFields =
-  | 'createdAt'
-  | 'updatedAt'
-  | 'name'
-  | 'username'
-  | 'status';
 export type PaginatedUsers = Paginated<UserWithoutSecretFields>;
 export type GetPaginatedUsers = ApiRequest<
   PaginationPayload<UserSortableFields>,
