@@ -1,5 +1,4 @@
 import { useTheme } from '@emotion/react';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Box,
   CircularProgress,
@@ -18,7 +17,7 @@ import {
 import { CourseSortableFields } from '@types';
 import { useGetCreatedCoursesQuery } from 'api';
 import {
-  Button,
+  PaginationLoadMoreButton,
   PaginationSort,
   PaginationSortProps,
   ScrollableStack
@@ -169,8 +168,7 @@ export default function PaginatedCourses({
           justifyContent='space-between'
           alignItems='center'
         >
-          <Button
-            variant='contained'
+          <PaginationLoadMoreButton
             loading={isFetchingNextPage}
             onClick={() => {
               fetchNextPage({
@@ -183,12 +181,7 @@ export default function PaginatedCourses({
               });
             }}
             disabled={totalFetchedItems === totalItems}
-            endIcon={
-              !isFetchingNextPage && <ArrowDropDownIcon fontSize='small' />
-            }
-          >
-            Load more
-          </Button>
+          />
           <Select<number>
             value={itemsPerPage}
             onChange={(e) => {
