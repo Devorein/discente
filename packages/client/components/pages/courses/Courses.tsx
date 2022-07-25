@@ -1,3 +1,5 @@
+import { PaginatedCourses } from 'components';
+
 export default function Courses() {
-  return <div>Courses</div>;
+  return <PaginatedCourses />;
 }

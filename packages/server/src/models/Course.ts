@@ -44,7 +44,7 @@ export async function getCreatedCourses(
       image: true,
       price: true,
       tags: true,
-      author: {
+      instructor: {
         select: {
           name: true,
           avatar: true,

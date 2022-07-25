@@ -95,7 +95,8 @@ export type CourseSortableFields =
   | 'updatedAt'
   | 'price'
   | 'ratings'
-  | 'enrolled';
+  | 'enrolled'
+  | 'status';
 export type GetPaginatedCourses = ApiRequest<
   PaginationPayload<CourseSortableFields>,
   PaginatedCourses

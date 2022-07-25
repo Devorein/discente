@@ -38,7 +38,8 @@ export function getPaginatedCoursesPayloadSchema() {
           'title',
           'price',
           'ratings',
-          'enrolled'
+          'enrolled',
+          'status'
         ])
         .required(),
       order: yup.string().oneOf(['asc', 'desc']).required()

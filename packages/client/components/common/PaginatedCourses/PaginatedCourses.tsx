@@ -23,11 +23,11 @@ import CourseSort from './CourseSort';
 
 interface PaginatedCoursesProps extends PaperProps {}
 
-export default function paginatedCourses({
+export default function PaginatedCourses({
   sx = {},
   ...props
 }: PaginatedCoursesProps) {
-  const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sortField, setSortField] = useState<CourseSortableFields>('title');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
@@ -144,7 +144,11 @@ export default function paginatedCourses({
                           {paginatedCourse.status}
                         </Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          minWidth: 150
+                        }}
+                      >
                         <Typography variant='subtitle2'>
                           {new Date(paginatedCourse.updatedAt).toLocaleString()}
                         </Typography>
@@ -162,6 +166,7 @@ export default function paginatedCourses({
           alignItems='center'
         >
           <Button
+            variant='contained'
             loading={isFetchingNextPage}
             onClick={() => {
               fetchNextPage({

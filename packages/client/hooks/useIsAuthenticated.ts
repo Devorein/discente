@@ -6,7 +6,8 @@ export const protectedRoutes = [
   '/profile/change-password',
   '/profile/update-user',
   '/profile',
-  '/create-course'
+  '/create-course',
+  '/courses'
 ];
 
 export function useIsAuthenticated() {

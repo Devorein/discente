@@ -32,6 +32,7 @@ export default function CourseSort(props: CourseSortProps) {
           <MenuItem value='price'>Price</MenuItem>
           <MenuItem value='ratings'>Ratings</MenuItem>
           <MenuItem value='enrolled'>Enrolled</MenuItem>
+          <MenuItem value='status'>Status</MenuItem>
           <MenuItem value='updatedAt'>Updated</MenuItem>
           <MenuItem value='createdAt'>Created</MenuItem>
         </Select>

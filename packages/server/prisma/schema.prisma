@@ -41,7 +41,7 @@ model Course {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   createdBy   String      @db.Uuid
-  author      User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  instructor  User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   description String
   image       String
   tags        String[]

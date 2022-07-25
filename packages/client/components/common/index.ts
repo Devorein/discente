@@ -12,6 +12,7 @@ import StyledLink from './StyledLink';
 export * from './Avatar';
 export * from './Form';
 export * from './Navbar';
+export * from './PaginatedCourses';
 export {
   Button,
   ScrollableStack,

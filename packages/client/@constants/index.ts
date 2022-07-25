@@ -246,7 +246,7 @@ const createCourseConstants: CreateCourseConstants = {
 };
 
 const getCreatedCoursesConstants: ApiConstants = {
-  endpoint: 'courses/created',
+  endpoint: 'course/created',
   key: (payload: GetPaginatedCourses['payload']) => [
     `users:sort=${payload.sort}&order=${payload.order}`
   ]
