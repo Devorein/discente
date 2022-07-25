@@ -99,8 +99,8 @@ export function generateCourseCreateData(
 }
 
 const TOTAL_USERS = 50;
-const MIN_COURSE_PER_USER = 1;
-const MAX_COURSE_PER_USER = 5;
+const MIN_COURSE_PER_USER = 3;
+const MAX_COURSE_PER_USER = 10;
 
 async function main() {
   const usersCreateData: UserCreateData[] = [];

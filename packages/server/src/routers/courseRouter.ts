@@ -10,7 +10,7 @@ const courseRouter = Router();
 
 courseRouter.get(
   '/created',
-  validateData(getPaginatedCoursesPayloadSchema()),
+  validateData(getPaginatedCoursesPayloadSchema(), true),
   isAuthenticated,
   isAuthorized(['instructor']),
   courseController.getCreated

@@ -30,7 +30,11 @@ export async function getCreatedCourses(
   payload: GetPaginatedCourses['payload'],
   userId: string
 ): Promise<PaginatedCourses> {
-  const totalCreatedCourses = await prisma.course.count({});
+  const totalCreatedCourses = await prisma.course.count({
+    where: {
+      createdBy: userId
+    }
+  });
   const courseFindManyArgs: Prisma.CourseFindManyArgs = {
     select: {
       id: true,
@@ -40,7 +44,14 @@ export async function getCreatedCourses(
       image: true,
       price: true,
       tags: true,
-      author: true,
+      author: {
+        select: {
+          name: true,
+          avatar: true,
+          id: true,
+          username: true
+        }
+      },
       status: true,
       title: true,
       updatedAt: true
