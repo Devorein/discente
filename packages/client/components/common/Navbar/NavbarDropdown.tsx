@@ -1,8 +1,8 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VideocamIcon from '@mui/icons-material/Videocam';
-import { Avatar, Box, Typography } from '@mui/material';
-import { Button } from 'components';
+import { Box, Typography } from '@mui/material';
+import { Button, CurrentUserAvatar } from 'components';
 import { useCurrentUser } from 'contexts';
 import Dropdown from '../Dropdown';
 import LogoutButton from '../LogoutButton';
@@ -10,13 +10,6 @@ import StyledLink from '../StyledLink';
 
 export default function NavbarDropdown() {
   const { currentUser } = useCurrentUser<true>();
-  const currentAvatar = currentUser.avatar;
-  const currName = currentUser.name
-    ?.split(' ')
-    .reduce(
-      (prevChar, currChar) => prevChar + currChar.charAt(0).toUpperCase(),
-      ''
-    );
   const { role } = currentUser;
 
   const dropdownButton = (
@@ -29,11 +22,7 @@ export default function NavbarDropdown() {
         gap: 1
       }}
     >
-      {currentAvatar ? (
-        <Avatar src={currentAvatar} />
-      ) : (
-        <Avatar>{currName}</Avatar>
-      )}
+      <CurrentUserAvatar />
       <Typography
         variant='subtitle1'
         sx={{

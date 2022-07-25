@@ -8,6 +8,7 @@ import OAuthBar from './OAuthBar';
 import Providers from './Providers';
 import StyledLink from './StyledLink';
 
+export * from './Avatar';
 export * from './Form';
 export * from './Navbar';
 export {
