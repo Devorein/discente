@@ -6,6 +6,7 @@ import Logo from './Logo';
 import LogoutButton from './LogoutButton';
 import OAuthBar from './OAuthBar';
 import Providers from './Providers';
+import ScrollableStack from './ScrollableStack';
 import StyledLink from './StyledLink';
 
 export * from './Avatar';
@@ -13,6 +14,7 @@ export * from './Form';
 export * from './Navbar';
 export {
   Button,
+  ScrollableStack,
   LogoutButton,
   ConfirmDialog,
   OAuthBar,
