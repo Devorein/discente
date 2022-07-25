@@ -4,7 +4,7 @@ import User from './User';
 export const constants = {
   Course,
   User,
-  Status: ['public', 'private', 'protected']
+  Status: ['public', 'private', 'banned'] as const
 };
 
 export type UserSortableFields = typeof User.sortableFields[number];

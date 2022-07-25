@@ -10,7 +10,7 @@
 CREATE TYPE "CourseLevel" AS ENUM ('beginner', 'intermediate', 'expert', 'all');
 
 -- CreateEnum
-CREATE TYPE "Language" AS ENUM ('english', 'french', 'spanish', 'portugese', 'arabic', 'polish', 'german', 'italian', 'bangla', 'korean', 'russian', 'japanese', 'hindi');
+CREATE TYPE "Language" AS ENUM ('english', 'french', 'spanish', 'portuguese', 'arabic', 'polish', 'german', 'italian', 'bengali', 'korean', 'russian', 'japanese', 'hindi');
 
 -- CreateEnum
 CREATE TYPE "CourseCategory" AS ENUM ('development', 'business', 'finance_and_accounting', 'it_and_software', 'office_productivity', 'personal_development', 'design', 'marketing', 'lifestyle', 'photography_and_video', 'health_and_fitness', 'music', 'teaching_and_academics');

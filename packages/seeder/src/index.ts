@@ -1,6 +1,7 @@
 import { prisma } from '@discente/server/dist/config';
 import { Prisma } from '@discente/server/dist/types';
 import { hashPassword } from '@discente/server/dist/utils';
+import { constants } from '@discente/shared';
 import { faker } from '@faker-js/faker';
 import colors from 'colors';
 import fs from 'fs';
@@ -54,7 +55,7 @@ export async function generateUserCreateData(): Promise<UserCreateData> {
       role: faker.datatype.boolean() ? 'learner' : 'instructor',
       tokenVersion: 0,
       avatar: faker.datatype.boolean() ? faker.internet.avatar() : null,
-      status: faker.helpers.arrayElement(['public', 'private'])
+      status: faker.helpers.arrayElement(constants.Status)
     },
     password
   };
@@ -92,7 +93,13 @@ export function generateCourseCreateData(
     createdBy: author.user.id,
     createdAt,
     updatedAt,
-    status: faker.datatype.boolean() ? 'private' : 'public',
+    status: faker.helpers.arrayElement(constants.Status),
+    category: faker.helpers.arrayElement(constants.Course.category),
+    language: faker.helpers.arrayElement(constants.Course.language),
+    level: faker.helpers.arrayElement(constants.Course.level),
+    subtitle: faker.datatype.boolean()
+      ? faker.helpers.arrayElement(constants.Course.language)
+      : null,
     tags: new Array(
       faker.datatype.number({
         min: 1,
