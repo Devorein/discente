@@ -5,6 +5,8 @@ import { isAuthenticated, isAuthorized, validateData } from '../middlewares';
 
 const courseRouter = Router();
 
+courseRouter.get('/created', isAuthenticated, courseController.getCreated);
+
 courseRouter.post(
   '/',
   validateData(createCoursePayloadSchema()),

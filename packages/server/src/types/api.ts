@@ -1,5 +1,5 @@
 import { Course, Prisma, User } from '@prisma/client';
-import { UserWithoutSecretFields } from './data';
+import { CourseWithInstructor, UserWithoutSecretFields } from './data';
 
 export interface ErrorApiResponse {
   status: 'error';
@@ -16,9 +16,13 @@ export type Paginated<Data> = {
   next: null | string;
 };
 
-export type PaginationPayload = Record<string, any> & {
+export type SortOrder = 'asc' | 'desc';
+
+export type PaginationPayload<Sort extends string> = Record<string, any> & {
   cursor: string | null;
   take: number;
+  sort: Sort;
+  order: SortOrder;
 };
 
 export interface ApiRequest<
@@ -47,8 +51,17 @@ type LoginUserPayload = {
 };
 export type LoginUser = ApiRequest<LoginUserPayload, UserWithoutSecretFields>;
 
+export type UserSortableFields =
+  | 'createdAt'
+  | 'updatedAt'
+  | 'name'
+  | 'username'
+  | 'status';
 export type PaginatedUsers = Paginated<UserWithoutSecretFields>;
-export type GetPaginatedUsers = ApiRequest<PaginationPayload, PaginatedUsers>;
+export type GetPaginatedUsers = ApiRequest<
+  PaginationPayload<UserSortableFields>,
+  PaginatedUsers
+>;
 
 export type GetCurrentUser = ApiRequest<null, UserWithoutSecretFields>;
 
@@ -74,3 +87,16 @@ type CreateCoursePayload = Pick<
   'description' | 'image' | 'price' | 'status' | 'tags' | 'title'
 >;
 export type CreateCourse = ApiRequest<CreateCoursePayload, Course>;
+
+export type PaginatedCourses = Paginated<CourseWithInstructor>;
+export type CourseSortableFields =
+  | 'title'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'price'
+  | 'ratings'
+  | 'enrolled';
+export type GetPaginatedCourses = ApiRequest<
+  PaginationPayload<CourseSortableFields>,
+  PaginatedCourses
+>;
