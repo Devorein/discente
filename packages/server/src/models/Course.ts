@@ -13,14 +13,8 @@ export async function createCourse(
 ) {
   const createdCourse = await prisma.course.create({
     data: {
-      description: payload.description,
-      image: payload.image,
-      price: payload.price,
-      title: payload.title,
-      createdBy,
-      status: payload.status,
-      tags: payload.tags,
-      briefDescription: payload.briefDescription
+      ...payload,
+      createdBy
     }
   });
 
