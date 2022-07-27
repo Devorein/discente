@@ -1,14 +1,22 @@
-import { Avatar } from '@mui/material';
+import { Avatar, AvatarProps } from '@mui/material';
 
-interface CustomAvatarProps {
+interface CustomAvatarProps extends Partial<AvatarProps> {
   name: string | null;
   avatar: string | null;
 }
 
-export default function CustomAvatar({ name, avatar }: CustomAvatarProps) {
+export default function CustomAvatar({
+  name,
+  avatar,
+  ...props
+}: CustomAvatarProps) {
   const shortenedName = name
     ?.split(' ')
     .reduce((prev, curr) => prev + curr.charAt(0).toUpperCase(), '');
 
-  return avatar ? <Avatar src={avatar} /> : <Avatar>{shortenedName}</Avatar>;
+  return avatar ? (
+    <Avatar {...props} src={avatar} />
+  ) : (
+    <Avatar {...props}>{shortenedName}</Avatar>
+  );
 }

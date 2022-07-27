@@ -1,3 +1,4 @@
+import { CourseSortableFields } from '@discente/shared';
 import {
   Box,
   CircularProgress,
@@ -9,14 +10,14 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-import { CourseSortableFields } from '@types';
 import { useGetCreatedCoursesQuery } from 'api';
 import {
   CustomAvatar,
   PaginationLoadMoreButton,
   PaginationSort,
   PaginationSortProps,
-  ScrollableStack
+  ScrollableStack,
+  StyledLink
 } from 'components';
 import { useState } from 'react';
 
@@ -109,24 +110,32 @@ export default function PaginatedCourses({
                   }}
                   elevation={0}
                 >
-                  <Stack flexDirection='row' gap={2}>
-                    <img
-                      src={paginatedCourse.image}
-                      style={{
-                        height: 100,
-                        width: 150
-                      }}
-                    />
-                    <Grid>
+                  <Grid container>
+                    <Grid item md={3}>
+                      <img
+                        src={paginatedCourse.image}
+                        style={{
+                          height: 100,
+                          width: 150
+                        }}
+                      />
+                    </Grid>
+                    <Grid item md={9}>
                       <Stack gap={1}>
                         <Typography variant='h6'>
-                          {paginatedCourse.title}
+                          <StyledLink href={`/courses/${paginatedCourse.id}`}>
+                            {paginatedCourse.title}
+                          </StyledLink>
                         </Typography>
                         <Typography variant='body2'>
                           {paginatedCourse.briefDescription}
                         </Typography>
                         <Stack gap={1} alignItems='center' flexDirection='row'>
                           <CustomAvatar
+                            sx={{
+                              width: 25,
+                              height: 25
+                            }}
                             avatar={paginatedCourse.instructor.avatar}
                             name={paginatedCourse.instructor.name}
                           />
@@ -136,7 +145,7 @@ export default function PaginatedCourses({
                         </Stack>
                       </Stack>
                     </Grid>
-                  </Stack>
+                  </Grid>
                 </Paper>
               );
             })}
