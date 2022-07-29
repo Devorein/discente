@@ -1,9 +1,20 @@
-import { createCoursePayloadSchema } from '@discente/shared';
+import {
+  createCoursePayloadSchema,
+  getPaginatedCoursesPayloadSchema
+} from '@discente/shared';
 import { Router } from 'express';
 import { courseController } from '../controllers';
 import { isAuthenticated, isAuthorized, validateData } from '../middlewares';
 
 const courseRouter = Router();
+
+courseRouter.get(
+  '/created',
+  validateData(getPaginatedCoursesPayloadSchema(), true),
+  isAuthenticated,
+  isAuthorized(['instructor']),
+  courseController.getCreated
+);
 
 courseRouter.post(
   '/',

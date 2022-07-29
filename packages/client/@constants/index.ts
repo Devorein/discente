@@ -9,6 +9,7 @@ import {
 import {
   ChangeUserPassword,
   CreateCourse,
+  GetPaginatedCourses,
   LoginUser,
   RegisterUser,
   UpdateUser
@@ -214,7 +215,8 @@ const createCourseConstants: CreateCourseConstants = {
     price: 10,
     status: 'public',
     tags: [],
-    title: ''
+    title: '',
+    briefDescription: ''
   }),
   validationSchema: createCoursePayloadSchema(),
   successMessage: 'Successfully created course',
@@ -225,7 +227,8 @@ const createCourseConstants: CreateCourseConstants = {
     price: 'Price',
     status: 'Status',
     tags: 'Tags',
-    title: 'Title'
+    title: 'Title',
+    briefDescription: 'Brief description'
   },
   onLoadButtonText: 'Creating ...',
   placeholder: {
@@ -234,14 +237,23 @@ const createCourseConstants: CreateCourseConstants = {
     price: '15',
     status: '',
     tags: 'finance, fitness, k8s',
-    title: 'My awesome course'
+    title: 'My awesome course',
+    briefDescription: 'This course covers ...'
   },
   submitButtonText: 'Create',
   formHeaderHelperText:
     'Take the first step and create a course to share the joy of learning',
   helperText: {
-    tags: 'A collection of tags to aid in course discovery'
+    tags: 'A collection of tags to aid in course discovery',
+    briefDescription: 'A brief description regarding the course'
   }
+};
+
+const getCreatedCoursesConstants: ApiConstants = {
+  endpoint: 'course/created',
+  key: (payload: GetPaginatedCourses['payload']) => [
+    `users:sort=${payload.sort}&order=${payload.order}`
+  ]
 };
 
 export const apiConstants = {
@@ -252,7 +264,8 @@ export const apiConstants = {
   loginUser: loginUserConstants,
   deleteUser: deleteUserConstants,
   changeUserPassword: changeUserPasswordConstants,
-  createCourse: createCourseConstants
+  createCourse: createCourseConstants,
+  getCreatedCourses: getCreatedCoursesConstants
 };
 
 export const siteMetadata = {

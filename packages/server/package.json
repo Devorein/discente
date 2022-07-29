@@ -30,7 +30,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^3.14.0",
+    "@prisma/client": "^4.1.0",
     "argon2": "^0.28.5",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -52,7 +52,7 @@
     "@types/uuid": "^8.3.4",
     "axios": "^0.27.2",
     "pgtools": "^0.3.2",
-    "prisma": "^3.14.0",
+    "prisma": "^4.1.0",
     "supertest": "^6.2.3"
   }
 }

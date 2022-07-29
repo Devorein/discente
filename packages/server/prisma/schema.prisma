@@ -17,6 +17,46 @@ enum UserRole {
 enum ModelStatus {
   public
   private
+  banned
+}
+
+enum CourseLevel {
+  beginner
+  intermediate
+  expert
+  all
+}
+
+enum Language {
+  english
+  french
+  spanish
+  portuguese
+  arabic
+  polish
+  german
+  italian
+  bengali
+  korean
+  russian
+  japanese
+  hindi
+}
+
+enum CourseCategory {
+  development
+  business
+  finance_and_accounting
+  it_and_software
+  office_productivity
+  personal_development
+  design
+  marketing
+  lifestyle
+  photography_and_video
+  health_and_fitness
+  music
+  teaching_and_academics
 }
 
 model User {
@@ -35,15 +75,20 @@ model User {
 }
 
 model Course {
-  id          String      @id @default(uuid()) @db.Uuid
-  title       String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  createdBy   String      @db.Uuid
-  author      User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  description String
-  image       String
-  tags        String[]
-  price       Int
-  status      ModelStatus @default(public)
+  id               String         @id @default(uuid()) @db.Uuid
+  title            String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  createdBy        String         @db.Uuid
+  instructor       User           @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  briefDescription String
+  description      String
+  image            String
+  tags             String[]
+  price            Int
+  status           ModelStatus    @default(public)
+  category         CourseCategory
+  level            CourseLevel
+  language         Language
+  subtitle         Language?
 }

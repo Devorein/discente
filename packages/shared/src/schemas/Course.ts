@@ -6,6 +6,7 @@ export function createCoursePayloadSchema() {
     .shape({
       image: yup.string().required(),
       description: yup.string().required(),
+      briefDescription: yup.string().required(),
       title: yup.string().required(),
       status: yup
         .string()
@@ -15,5 +16,34 @@ export function createCoursePayloadSchema() {
       tags: yup.array().of(yup.string()).required()
     })
     .strict()
+    .noUnknown();
+}
+
+export function getPaginatedCoursesPayloadSchema() {
+  return yup
+    .object()
+    .shape({
+      cursor: yup.string(),
+      take: yup
+        .number()
+        .min(5)
+        .max(100)
+        .positive()
+        .transform((value) => parseInt(value, 10))
+        .required(),
+      sort: yup
+        .string()
+        .oneOf([
+          'createdAt',
+          'updatedAt',
+          'title',
+          'price',
+          'ratings',
+          'enrolled',
+          'status'
+        ])
+        .required(),
+      order: yup.string().oneOf(['asc', 'desc']).required()
+    })
     .noUnknown();
 }
