@@ -102,6 +102,7 @@ export default function PaginatedCourses({
             }}
           >
             {allItems.map((paginatedCourse) => {
+              const lastUpdatedDate = new Date(paginatedCourse.updatedAt);
               return (
                 <Paper
                   key={paginatedCourse.id}
@@ -122,15 +123,27 @@ export default function PaginatedCourses({
                     </Grid>
                     <Grid item md={9}>
                       <Stack gap={1}>
-                        <Typography variant='h6'>
-                          <StyledLink href={`/courses/${paginatedCourse.id}`}>
-                            {paginatedCourse.title}
-                          </StyledLink>
-                        </Typography>
+                        <StyledLink
+                          variant='h6'
+                          href={`/courses/${paginatedCourse.id}`}
+                        >
+                          {paginatedCourse.title}
+                        </StyledLink>
                         <Typography variant='body2'>
                           {paginatedCourse.briefDescription}
                         </Typography>
+                        <Stack flexDirection='row' gap={1} alignItems='center'>
+                          <Typography variant='subtitle2'>Updated</Typography>
+                          <Typography variant='body2' fontWeight={600}>
+                            {lastUpdatedDate.toLocaleString('default', {
+                              month: 'long'
+                            })}{' '}
+                            {lastUpdatedDate.getFullYear()}
+                          </Typography>
+                          {paginatedCourse.level}
+                        </Stack>
                         <Stack gap={1} alignItems='center' flexDirection='row'>
+                          <Typography variant='subtitle2'>by</Typography>
                           <CustomAvatar
                             sx={{
                               width: 25,
@@ -139,7 +152,7 @@ export default function PaginatedCourses({
                             avatar={paginatedCourse.instructor.avatar}
                             name={paginatedCourse.instructor.name}
                           />
-                          <Typography variant='subtitle2'>
+                          <Typography variant='subtitle1'>
                             {paginatedCourse.instructor.name}
                           </Typography>
                         </Stack>
